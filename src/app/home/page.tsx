@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
         const response = await authService.verify();
         setUser(response.data.user);
       } catch (err) {
-        router.push('/auth/login');
+        router.push('/auth/signin');
         console.log(err)
       }
     };

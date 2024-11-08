@@ -23,11 +23,12 @@ class AuthService {
     });
   }
 
-  login = (requestBody: { userName: string; password: string }) => {
-    return this.api.post('/auth/login', requestBody);
+  signin = (requestBody: { userName: string; password: string }) => {
+    return this.api.post('/auth/signin', requestBody);
   };
 
   signup = (requestBody: { userName: string; email: string; password: string }) => {
+    console.log('just some text')
     return this.api.post('/auth/signup', requestBody);
   };
 

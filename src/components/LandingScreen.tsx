@@ -11,7 +11,7 @@ const LandingScreen = () => {
     const timer = setTimeout(() => {
       setMoveLogo(true);
       setShowButtons(true);
-    }, 5000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -37,7 +37,7 @@ const LandingScreen = () => {
       {showButtons && (
         <div className="space-x-4 z-10">
           <button
-            onClick={() => router.push('/auth/login')}
+            onClick={() => router.push('/auth/signin')}
             className="px-4 py-2 bg-white text-white-300 rounded"
           >
             Sign In
