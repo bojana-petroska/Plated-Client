@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import AuthForm from '../../../components/AuthForm';
 import authService from '@/services/authService';
 
@@ -8,7 +8,7 @@ const SignIn = () => {
   const router = useRouter();
   const [error, setError] = useState('');
 
-  const handleLogin = async (data: { username: string; password: string }) => {
+  const handleLogin = async (data: { userName: string; password: string }) => {
     try {
       const response = await authService.login(data);
       const { token } = response.data;

@@ -1,11 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import AuthForm from '../../../components/AuthForm';
 import authService from '@/services/authService';
 
-type SignupData = { username: string; email: string; password: string };
-type LoginData = { username: string; password: string };
+type SignupData = { userName: string; email: string; password: string };
+type LoginData = { userName: string; password: string };
 
 const SignUp = () => {
   const router = useRouter();
@@ -13,9 +13,7 @@ const SignUp = () => {
 
   const handleSignup = async (data: SignupData | LoginData) => {
     try {
-      // Type guard to check if it's SignupData
       if ('email' in data) {
-        // Proceed with signup if it's SignupData
         const response = await authService.signup(data as SignupData);
         const { token } = response.data;
         localStorage.setItem('authToken', token);

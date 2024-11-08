@@ -1,8 +1,8 @@
 import authService from '@/services/authService';
 import React, { useState } from 'react';
 
-type SignupData = { username: string; email: string; password: string };
-type LoginData = { username: string; password: string };
+type SignupData = { userName: string; email: string; password: string };
+type LoginData = { userName: string; password: string };
 
 interface AuthFormProps {
   isSignup?: boolean;
@@ -10,7 +10,7 @@ interface AuthFormProps {
 }
 
 const AuthForm = ({ isSignup = false, onSubmit }: AuthFormProps) => {
-  const [username, setUsername] = useState('');
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState(''); // Only used for signup
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState(''); // Only for signup
@@ -24,15 +24,17 @@ const AuthForm = ({ isSignup = false, onSubmit }: AuthFormProps) => {
     }
 
     const data = isSignup
-      ? { username, email, password }
-      : { username, password };
+      ? { userName, email, password }
+      : { userName, password };
 
     try {
       if (isSignup) {
-        await authService.signup(data as SignupData);
+        const response = await authService.signup(data as SignupData);
+        localStorage.setItem('authToken', response.data.token);
         onSubmit(data as SignupData);
       } else {
-        await authService.login(data as LoginData);
+        const response = await authService.login(data as LoginData);
+        localStorage.setItem('authToken', response.data.token);
         onSubmit(data as LoginData);
       }
     } catch (error) {
@@ -58,8 +60,8 @@ const AuthForm = ({ isSignup = false, onSubmit }: AuthFormProps) => {
       <input
         type="text"
         placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={userName}
+        onChange={(e) => setUserName(e.target.value)}
         required
         className="input-class"
       />
