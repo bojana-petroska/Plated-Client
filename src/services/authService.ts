@@ -5,14 +5,14 @@ class AuthService {
 
   constructor() {
     this.api = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001',
+      baseURL: 'http://localhost:5001',
     });
 
     // Automatically set JWT token in the headers for every request
     this.api.interceptors.request.use((config) => {
       // Retrieve the JWT token from the local storage
       const storedToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-
+      console.log(storedToken)
       if (storedToken) {
         config.headers.Authorization = `Bearer ${storedToken}`;
       }
@@ -28,12 +28,15 @@ class AuthService {
   };
 
   signup = (requestBody: { userName: string; email: string; password: string }) => {
-    console.log('just some text')
     return this.api.post('/auth/signup', requestBody);
   };
 
-  verify = () => {
-    return this.api.get('/auth/verify');
+  verify = async () => {
+    try {
+      return await this.api.get('/auth/verify');
+    } catch (error) {
+      return console.error(error);
+    }
   };
 }
 

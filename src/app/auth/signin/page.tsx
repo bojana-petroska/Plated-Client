@@ -1,4 +1,3 @@
-// SignIn.tsx
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -14,10 +13,14 @@ const SignIn = () => {
     e.preventDefault();
     try {
       const response = await authService.signin({ userName, password });
-      const { token } = response.data;
+      console.log(response)
+      console.log(response.data.success);
+      const { token } = response.data.data;
       localStorage.setItem('authToken', token);
+      console.log(token)
       router.push('/home');
     } catch (err) {
+      console.log(err)
       const errorMessage =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Sign in failed.';
       setError(errorMessage);

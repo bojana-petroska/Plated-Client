@@ -7,48 +7,65 @@ import { IRestaurant, IUser } from '@/types';
 
 const HomePage: React.FC = () => {
   const router = useRouter();
-  const [user, setUser] = useState<IUser>();
+  const [user, setUser] = useState<IUser | null>(null);
   const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState<string | null>(null); 
 
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await authService.verify();
-        setUser(response.data.user);
+        const response = await authService.verify(); 
+        setUser(response.data.data.userName);
       } catch (err) {
-        router.push('/auth/signin');
-        console.log(err)
+        console.log(err);
+        setError('Session expired or token invalid'); 
+        router.push('/auth/signin'); 
+      } finally {
+        setLoading(false); 
       }
     };
+
     verifyToken();
   }, [router]);
 
   useEffect(() => {
     const fetchRestaurants = async () => {
-      const response = await restaurantApi.getAllRestaurants();
-      if (response && Array.isArray(response.data)) {
-        setRestaurants(response.data);
+      try {
+        const response = await restaurantApi.getAllRestaurants();
+        if (response && Array.isArray(response.data)) {
+          setRestaurants(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch restaurants:', error);
       }
     };
+
     fetchRestaurants();
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
+
+  if (error) {
+    return <div>{error}</div>; 
+  }
+
   if (!user) {
-    return <div>Loading...</div>;
+    return <div>You must be logged in to view this page.</div>;
   }
 
   return (
-    <>
-      <div className="p-8">
-        <h1 className="text-3xl">Welcome, {user.userName}!</h1>
-        <h2 className="mt-6 text-2xl">All Restaurants</h2>
-        <ul>
-          {restaurants.map((restaurant) => (
-            <li key={restaurant.id}>{restaurant.name}</li>
-          ))}
-        </ul>
-      </div>
-    </>
+    <div className="p-8">
+      <h1 className="text-3xl">Welcome, {user.userName}!</h1>
+      <h2 className="mt-6 text-2xl">All Restaurants</h2>
+      <ul>
+        {restaurants.map((restaurant) => (
+          <li key={restaurant.id}>{restaurant.name}</li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

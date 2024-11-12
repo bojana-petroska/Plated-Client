@@ -1,4 +1,3 @@
-// SignUp.tsx
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -22,8 +21,13 @@ const SignUp = () => {
 
     try {
       const response = await authService.signup({ userName, email, password });
-      const { token } = response.data;
+      console.log(response);
+  
+      const signInResponse = await authService.signin({ userName, password });
+      const { token } = signInResponse.data.data;
       localStorage.setItem('authToken', token);
+      console.log(token);
+  
       router.push('/home');
     } catch (err) {
       const errorMessage =
