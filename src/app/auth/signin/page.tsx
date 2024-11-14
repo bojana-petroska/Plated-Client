@@ -16,8 +16,11 @@ const SignIn = () => {
       console.log(response)
       console.log(response.data.success);
       const { token } = response.data.data;
-      localStorage.setItem('authToken', token);
-      console.log(token)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('authToken', token);
+      }
+
+      console.log('TOKEN FROM HANDLE SIGN IN', token);
       router.push('/home');
     } catch (err) {
       console.log(err)

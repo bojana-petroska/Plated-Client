@@ -25,8 +25,10 @@ const SignUp = () => {
   
       const signInResponse = await authService.signin({ userName, password });
       const { token } = signInResponse.data.data;
-      localStorage.setItem('authToken', token);
-      console.log(token);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('authToken', token);
+      }
+      console.log('TOKEN IN HANDLE SIGN UP', token);
   
       router.push('/home');
     } catch (err) {

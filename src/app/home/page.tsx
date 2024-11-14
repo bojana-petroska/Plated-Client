@@ -2,31 +2,60 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import restaurantApi from '@/services/api/restaurantApi';
-import authService from '@/services/authService';
+// import authService from '@/services/authService';
 import { IRestaurant, IUser } from '@/types';
+import axios from 'axios';
 
 const HomePage: React.FC = () => {
   const router = useRouter();
   const [user, setUser] = useState<IUser | null>(null);
   const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState<string | null>(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   const verifyToken = async () => {
+  //     try {
+  //       const response = await authService.verify();
+  //       console.log(response);
+  //       setUser(response?.data?.user);
+  //     } catch (err) {
+  //       console.log(err);
+  //       setError('Session expired or token invalid');
+  //       router.push('/auth/signin');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   verifyToken();
+  // }, [router]);
 
   useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const response = await authService.verify(); 
-        setUser(response.data.data.userName);
-      } catch (err) {
-        console.log(err);
-        setError('Session expired or token invalid'); 
-        router.push('/auth/signin'); 
-      } finally {
-        setLoading(false); 
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          const response = await axios.get(`${API_URL}auth/profile`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(response.data);
+        } catch (error) {
+          console.error('Failed to fetch user data:', error);
+          localStorage.removeItem('authToken');
+          setError('Session expired or token invalid');
+          router.push('/auth/signin');
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
       }
     };
 
-    verifyToken();
+    fetchUserData();
   }, [router]);
 
   useEffect(() => {
@@ -45,11 +74,11 @@ const HomePage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>; 
+    return <div>{error}</div>;
   }
 
   if (!user) {
