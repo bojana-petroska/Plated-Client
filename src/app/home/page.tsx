@@ -34,13 +34,19 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('authToken');
+      console.log('TOKEN USED FOR USER FETCHING:', token);
       if (token) {
         try {
-          const response = await axios.get(`${API_URL}auth/profile`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await axios.get(
+            `http://localhost:5001/users/profile`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log(response);
+          console.log(response.data);
           setUser(response.data);
         } catch (error) {
           console.error('Failed to fetch user data:', error);
