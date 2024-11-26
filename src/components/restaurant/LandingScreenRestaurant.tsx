@@ -37,13 +37,13 @@ const LandingScreen = () => {
       {showButtons && (
         <div className="space-x-4 z-10">
           <button
-            onClick={() => router.push('/auth/signin')}
+            onClick={() => router.push('/restaurant/auth/signin')}
             className="px-4 py-2 bg-white text-white-300 rounded"
           >
             Sign In
           </button>
           <button
-            onClick={() => router.push('/auth/signup')}
+            onClick={() => router.push('/restaurant/auth/signup')}
             className="px-4 py-2 bg-white text-white-300 rounded"
           >
             Sign Up

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import authService from '@/services/authService';
+import authService from '../../../../services/authService';
 
 const SignUp = () => {
   const router = useRouter();
@@ -30,7 +30,7 @@ const SignUp = () => {
       }
       console.log('TOKEN IN HANDLE SIGN UP', token);
   
-      router.push('/home');
+      router.push('/user/home');
     } catch (err) {
       const errorMessage =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Sign up failed.';

@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
-import LandingScreen from '@/components/shared/LandingScreen';
+import LandingScreenUser from '@/components/user/LandingScreenUser';
 
 const LandingPage = () => {
-  return <LandingScreen />;
+  return <LandingScreenUser />;
 };
 
 export default LandingPage;

@@ -2,7 +2,7 @@ import { IOrder } from '@/types';
 import { io, Socket } from 'socket.io-client';
 
 class SocketService {
-  private socket: Socket;
+   private socket: Socket;
 
   constructor() {
     this.socket = io('http://localhost:5001');
@@ -13,13 +13,18 @@ class SocketService {
     this.socket.connect();
   }
 
-  registerClient(type: string, restaurantId: string) {
-    this.socket.emit('register', { type, restaurantId });
+  registerClient(restaurantId: string) {
+    console.log('Emitting register event with restaurantId:', restaurantId);
+    this.socket.emit('register', { restaurantId });
   }
 
   // Listen for orderCreated event
   listenForOrderCreation(callback: (order: IOrder) => void) {
     this.socket.on('orderCreated', callback);
+  }
+
+  getSocket() {
+    return this.socket;
   }
 
   disconnect() {

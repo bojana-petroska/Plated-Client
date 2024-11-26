@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import authService from '@/services/authService';
+import authService from '../../../../services/authService';
 
 const SignIn = () => {
   const router = useRouter();
@@ -21,7 +21,7 @@ const SignIn = () => {
       }
 
       console.log('TOKEN FROM HANDLE SIGN IN', token);
-      router.push('/home');
+      router.push('/user/home');
     } catch (err) {
       console.log(err)
       const errorMessage =

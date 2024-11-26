@@ -2,7 +2,7 @@
 import React from 'react';
 
 const RestaurantsHomePage = () => {
-  return <div></div>;
+  return <div>Restaurant Home</div>;
 };
 
 export default RestaurantsHomePage;
