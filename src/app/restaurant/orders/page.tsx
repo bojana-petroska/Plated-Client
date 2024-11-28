@@ -30,7 +30,6 @@ const RestaurantOrderNotifications = () => {
           // Connect and register as a restaurant
           socketService.connect();
           socketService.registerClient(restaurantId);
-          console.log('Notification sent')
         }
       } catch (error) {
         console.error('Failed to fetch the restaurant:', error);
