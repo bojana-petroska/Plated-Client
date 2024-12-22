@@ -6,23 +6,24 @@ export interface PaginatedResults<T> {
 }
 
 export interface IRestaurant {
-  id?: number;
+  restaurant_id?: number;
   name: string;
   password: string;
-  address: string;
-  phoneNumber: string;
-  email: string;
-  openingHours: string;
-  deliveryRadius: number;
+  address?: string;
+  phoneNumber?: string;
+  email?: string;
+  openingHours?: string;
+  deliveryRadius?: number;
   role?: string;
   menu?: IMenuItem[];
   isOpen?: boolean;
+  rating?: number;
 }
 
-export type RestaurantInput = Omit<IRestaurant, 'id' | 'menu'>;
+export type RestaurantInput = Omit<IRestaurant, 'restaurant_id' | 'menu'>;
 
 export interface IMenuItem {
-  id?: number;
+  menuItem_id?: number;
   name: string;
   description: string;
   price: number;
@@ -32,17 +33,20 @@ export interface IMenuItem {
   restaurantId?: number;
 }
 
-export type MenuItemInput = Omit<IMenuItem, 'id'>;
+export type MenuItemInput = Omit<IMenuItem, 'menuItem_id'>;
 
 export interface IUser {
-  id?: number;
+  user_id?: number;
   userName: string;
   email: string;
   password: string;
   address: string;
   phoneNumber: string;
+  profilePicture?: string;
   orderHistory?: IOrder[];
   role?: string;
+  token?: string;
+  refreshToken?: string;
   createdAt?: Date;
 }
 
@@ -57,34 +61,41 @@ export enum OrderStatus {
 }
 
 export interface IOrder {
-  id?: number;
-  userId: number;
-  restaurantId: number;
+  order_id?: number;
   orderItems: IOrderItem[];
   totalPrice: number;
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
+  restaurant?: {
+    restaurant_id: number;
+    name: string;
+  };
 }
 
 export type OrderInput = Omit<
   IOrder,
-  'id' | 'status' | 'createdAt' | 'updatedAt'
->;
+  'order_id' | 'status' | 'createdAt' | 'updatedAt'
+> & { restaurant_id: number };
 
 export interface ICart {
-  id?: number;
+  cart_id?: number;
   userId: number;
   orderItems: IOrderItem[];
   createdAt: Date;
   updatedAt?: Date;
 }
 
-export type CartInput = Omit<ICart, 'id' | 'createdAt' | 'updatedAt'>;
+export type CartInput = Omit<ICart, 'cart_id' | 'createdAt' | 'updatedAt'>;
 
 export interface IOrderItem {
-  id?: number;
-  order: IOrder;
+  orderItem_id?: number;
+  order?: IOrder;
   menuItem: IMenuItem;
   quantity: number;
+}
+
+export enum Availability {
+  available = 'available',
+  unavailable = 'unavailable',
 }

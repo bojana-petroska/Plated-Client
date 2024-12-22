@@ -1,10 +1,14 @@
-import axios from 'axios';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+import axiosInstance from './axiosInstance';
 
 const getAllRestaurants = async () => {
+  const token = localStorage.getItem('authToken');
+  console.log(token);
+  if (!token) {
+    throw new Error('User is not authenticated.');
+  }
+
   try {
-    const response = await axios.get(`${API_URL}/restaurants`);
+    const response = await axiosInstance.get(`/restaurants`);
     return response.data;
   } catch (error) {
     console.error(`Error at fetching restaurants.`, error);
@@ -14,7 +18,7 @@ const getAllRestaurants = async () => {
 
 const getRestaurantById = async (id: string) => {
   try {
-    const response = await axios.get(`${API_URL}/restaurants/${id}`);
+    const response = await axiosInstance.get(`/restaurants/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error at fetching the restaurant with id: ${id}.`, error);
@@ -23,8 +27,8 @@ const getRestaurantById = async (id: string) => {
 };
 
 const restaurantApi = {
-    getAllRestaurants,
-    getRestaurantById
-}
+  getAllRestaurants,
+  getRestaurantById,
+};
 
 export default restaurantApi;
