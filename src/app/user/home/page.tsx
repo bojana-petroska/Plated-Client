@@ -3,6 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { IRestaurant, IUser } from '@/types';
 import axiosInstance from '@/services/api/axiosInstance';
+import Header from '@/components/Header';
+import GradientHeading from '@/components/GradientHeading';
+import Button from '@/components/Buttons';
+import FoodTypes from '@/components/FoodType';
+import NavbarUser from '@/components/NavbarUser';
 
 const HomePage: React.FC = () => {
   const router = useRouter();
@@ -81,42 +86,34 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* Header */}
-      <header className="p-4 bg-red-500 text-white flex justify-between items-center">
-        <h1 className="text-lg font-bold">PLATED</h1>
-        {user && <p className="text-sm">Welcome, {user.userName}!</p>}
-      </header>
-
-      {/* Search and Categories */}
+      <Header logoSrc="/img/logo.jpg" userName={user.userName} />
       <section className="p-4">
-        <h2 className="text-2xl font-bold mb-4">
-          YOUR MEAL YOUR WAY RIGHT AWAY
-        </h2>
-        <div className="flex gap-2 mb-6">
-          <input
-            type="text"
-            placeholder="Find a restaurant..."
-            className="flex-1 p-2 border border-gray-300 rounded"
-          />
-          <button className="px-4 py-2 bg-red-500 text-white rounded">
-            Search
-          </button>
+        <GradientHeading />
+        <div className="relative w-full max-w-md">
+          <p className="mb-2 text-[16px] font-[MontserratAlternates] text-[#323232]">
+            What do you feel like eating today?
+          </p>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Find a restaurant..."
+              className="w-full px-4 py-2 pr-20 border border-gray-300 rounded-[15px] focus:outline-none"
+            />
+            <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+              <Button
+                // onClick={handleSearch}
+                text="Search"
+                type="pink"
+                size="small"
+              />
+            </div>
+          </div>
         </div>
-
-        <div className="flex justify-between mb-6">
-          <button className="bg-orange-100 text-orange-700 px-4 py-2 rounded">
-            Pasta (16)
-          </button>
-          <button className="bg-blue-100 text-blue-700 px-4 py-2 rounded">
-            Burger (9)
-          </button>
-          <button className="bg-green-100 text-green-700 px-4 py-2 rounded">
-            Salad (6)
-          </button>
+        <div className="p-4">
+          <FoodTypes />
         </div>
       </section>
 
-      {/* Restaurant List */}
       <main className="flex-1 overflow-y-auto px-4">
         <h2 className="text-xl font-bold mb-4">Restaurants near you</h2>
         <ul className="space-y-4">
@@ -134,16 +131,6 @@ const HomePage: React.FC = () => {
               />
               <div className="flex-1">
                 <h3 className="text-lg font-bold">{restaurant.name}</h3>
-                <p className="text-sm text-gray-500">
-                  {restaurant.address}
-                </p>{' '}
-                {/* Display address instead of cuisine */}
-                <p className="text-sm text-gray-500">
-                  Phone: {restaurant.phoneNumber}
-                </p>
-                <p className="text-sm text-gray-500">
-                  Email: {restaurant.email}
-                </p>
               </div>
               <div className="text-right">
                 <p className="text-sm text-yellow-600 font-bold">
@@ -161,13 +148,7 @@ const HomePage: React.FC = () => {
           Load More
         </button>
       </main>
-
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-gray-100 p-4 flex justify-around">
-        <button className="text-gray-700">Home</button>
-        <button className="text-gray-700">Orders</button>
-        <button className="text-gray-700">Profile</button>
-      </footer>
+      <NavbarUser />
     </div>
   );
 };
