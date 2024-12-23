@@ -22,18 +22,18 @@ const SignUp = () => {
     try {
       const response = await authService.signup({ userName, email, password });
       console.log(response);
-  
+
       const signInResponse = await authService.signin({ userName, password });
       const { token } = signInResponse.data.data;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('authToken', token);
-      }
+
+      localStorage.setItem('authToken', token);
       console.log('TOKEN IN HANDLE SIGN UP', token);
-  
+
       router.push('/user/home');
     } catch (err) {
       const errorMessage =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Sign up failed.';
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message || 'Sign up failed.';
       setError(errorMessage);
     }
   };

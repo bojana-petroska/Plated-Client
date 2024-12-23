@@ -13,19 +13,20 @@ const RestaurantSignInPage = () => {
     e.preventDefault();
     try {
       const response = await restaurantAuthService.signin({ name, password });
-      console.log(response)
+      console.log(response);
       console.log(response.data.success);
-      const { token } = response.data.data;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('authToken', token);
-      }
+      const { token, refreshToken } = response.data.data;
+      
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('refreshToken', refreshToken);
 
       console.log('TOKEN FROM HANDLE SIGN IN', token);
       router.push('/restaurant/home');
     } catch (err) {
-      console.log(err)
+      console.log(err);
       const errorMessage =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Sign in failed.';
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message || 'Sign in failed.';
       setError(errorMessage);
     }
   };
