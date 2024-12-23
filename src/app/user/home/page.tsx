@@ -97,7 +97,7 @@ const HomePage: React.FC = () => {
             <input
               type="text"
               placeholder="Find a restaurant..."
-              className="w-full px-4 py-2 pr-20 border border-gray-300 rounded-[15px] focus:outline-none"
+              className="w-full px-4 py-4 pr-20 border border-gray-300 rounded-[15px] focus:outline-none"
             />
             <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
               <Button
