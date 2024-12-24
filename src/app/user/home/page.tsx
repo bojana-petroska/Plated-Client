@@ -8,26 +8,31 @@ import GradientHeading from '@/components/GradientHeading';
 import Button from '@/components/Buttons';
 import FoodTypes from '@/components/FoodType';
 import NavbarUser from '@/components/NavbarUser';
+import RestaurantList from '@/components/RestaurantList';
 
 const HomePage: React.FC = () => {
   const router = useRouter();
   const [user, setUser] = useState<IUser | null>(null);
   const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<IRestaurant[]>(
+    []
+  );
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get('/users/profile');
-        console.log(response.data);
         setUser(response.data);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
         localStorage.removeItem('authToken');
         setError('Session expired or token invalid');
-        router.push('/auth/signin');
+        router.push('/user/auth/signin');
       } finally {
         setLoading(false);
       }
@@ -38,41 +43,70 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     const fetchRestaurants = async () => {
+      if (!hasMore || loading) return;
+
       try {
+        setLoading(true);
         const response = await axiosInstance.get(`/restaurants?page=${page}`);
-        console.log(response.data.data);
-        if (response?.data.data && Array.isArray(response.data.data)) {
-          setRestaurants((prev) => [...prev, ...response.data.data]);
+        const fetchedRestaurants = Array.isArray(response?.data?.data)
+          ? response.data.data
+          : [];
+        setRestaurants((prev) => [...prev, ...fetchedRestaurants]);
+        setFilteredRestaurants((prev) => [...prev, ...fetchedRestaurants]);
+
+        if (fetchedRestaurants.length < 20) {
+          setHasMore(false);
         }
       } catch (error) {
         console.error('Failed to fetch restaurants:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRestaurants();
-  }, [page]);
+  }, [page, hasMore, loading]);
+
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredRestaurants(restaurants);
+    } else {
+      const keywords = searchQuery.toLowerCase().split(/\s+/);
+
+      const filtered = restaurants.filter((restaurant) => {
+        const nameMatch = keywords.some((keyword) =>
+          restaurant.name.toLowerCase().includes(keyword)
+        );
+
+        const menuItemsMatch = restaurant.menu?.some(
+          (menuItem: { name: string }) =>
+            keywords.some((keyword) =>
+              menuItem.name.toLowerCase().includes(keyword)
+            )
+        );
+
+        return nameMatch || menuItemsMatch;
+      });
+
+      setFilteredRestaurants(filtered);
+    }
+  }, [searchQuery, restaurants]);
 
   const loadMoreRestaurants = () => {
-    setPage((prev) => prev + 1);
+    if (!loading && hasMore) {
+      setPage((prev) => prev + 1);
+    }
   };
 
   const handleRestaurantClick = async (restaurantId: number | undefined) => {
     try {
-      const restaurant = await axiosInstance.get(
-        `/restaurants/${restaurantId}`
-      );
-      const menuItems = await axiosInstance.get(
-        `/restaurants/${restaurantId}/menu`
-      );
-      console.log('Restaurant:', restaurant.data);
-      console.log('Menu Items:', menuItems.data);
       router.push(`/restaurant/${restaurantId}`);
     } catch (error) {
-      console.error('Error fetching restaurant details:', error);
+      console.error('Error navigating to restaurant:', error);
     }
   };
 
-  if (loading) {
+  if (loading && page === 1) {
     return <div>Loading...</div>;
   }
 
@@ -97,16 +131,10 @@ const HomePage: React.FC = () => {
             <input
               type="text"
               placeholder="Find a restaurant..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-4 py-4 pr-20 border border-gray-300 rounded-[15px] focus:outline-none"
             />
-            <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
-              <Button
-                // onClick={handleSearch}
-                text="Search"
-                type="pink"
-                size="small"
-              />
-            </div>
           </div>
         </div>
         <div className="p-4">
@@ -116,37 +144,22 @@ const HomePage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto px-4">
         <h2 className="text-xl font-bold mb-4">Restaurants near you</h2>
-        <ul className="space-y-4">
-          {restaurants.map((restaurant) => (
-            <li
-              key={restaurant.restaurant_id}
-              className="flex items-center gap-4 p-4 border border-gray-200 rounded shadow-sm cursor-pointer"
-              onClick={() => handleRestaurantClick(restaurant.restaurant_id)}>
-              <img
-                src="/img/hero.jpg"
-                alt="Restaurant placeholder"
-                width={80}
-                height={80}
-                className="rounded object-cover"
-              />
-              <div className="flex-1">
-                <h3 className="text-lg font-bold">{restaurant.name}</h3>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-yellow-600 font-bold">
-                  ★ {restaurant.rating || 'N/A'}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-
+        <RestaurantList
+          filteredRestaurants={filteredRestaurants}
+          handleRestaurantClick={handleRestaurantClick}
+        />
         {loading && <p>Loading more restaurants...</p>}
-        <button
-          className="w-full p-2 mt-4 bg-red-500 text-white rounded"
-          onClick={loadMoreRestaurants}>
-          Load More
-        </button>
+        {!loading && hasMore && (
+          <div className="flex justify-center mt-4">
+            <Button
+              text="Load More Restaurants"
+              type="pink"
+              size="small"
+              onClick={loadMoreRestaurants}
+            />
+          </div>
+        )}
+        {!hasMore && <p>No more restaurants available.</p>}
       </main>
       <NavbarUser />
     </div>
