@@ -11,30 +11,31 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
   handleRestaurantClick,
 }) => {
   return (
-    <ul className="space-y-4">
+    <ul className="space-y-6">
       {filteredRestaurants.map((restaurant, index) => (
         <li
           key={`${restaurant.restaurant_id}-${index}`}
-          className="relative flex items-center gap-4 p-6 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-all"
+          className="relative flex items-center bg-white rounded-lg shadow-xl cursor-pointer hover:shadow-xl transition-all overflow-hidden"
           onClick={() => handleRestaurantClick(restaurant.restaurant_id)}
         >
-          {/* Restaurant Image (cut-out circle extending beyond card) */}
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-24 h-24 overflow-hidden rounded-full border-4 border-white shadow-lg">
-            <img
-              src="/img/hero.jpg"
-              alt="Restaurant placeholder"
-              className="object-cover w-full h-full"
-            />
-          </div>
-
-          {/* Restaurant Info Section */}
-          <div className="flex-1 pr-28">
-            <h3 className="text-xl font-bold">{restaurant.name}</h3>
-            <p className="text-sm text-gray-600">{restaurant.openingHours}</p>
+          <div className="flex-1 pl-5 pb-5 pt-5">
+            <h3 className="text-lg font-semibold text-gray-900 relative z-10 pb-10">{restaurant.name}</h3>
+           
+            <div className="mt-1 flex items-center text-sm text-gray-600 space-x-4">
+              <span>⏱ {restaurant.openingHours}</span>
+            </div>
             <div className="mt-2 text-sm text-yellow-600 font-bold">
               ★ {restaurant.rating || 'N/A'}
             </div>
             <p className="mt-2 text-sm text-gray-600">Min Order: €10</p>
+          </div>
+
+          <div className="absolute right-[-40px] top-15 w-40 h-40 overflow-hidden rounded-full">
+            <img
+              src="/img/hero.jpg"
+              alt={restaurant.name}
+              className="object-cover w-full h-full"
+            />
           </div>
         </li>
       ))}

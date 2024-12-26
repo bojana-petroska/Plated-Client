@@ -143,7 +143,7 @@ const HomePage: React.FC = () => {
       </section>
 
       <main className="flex-1 overflow-y-auto px-4">
-        <h2 className="text-xl font-bold mb-4">Restaurants near you</h2>
+        <h2 className="text-xl mb-4">Restaurants near you</h2>
         <RestaurantList
           filteredRestaurants={filteredRestaurants}
           handleRestaurantClick={handleRestaurantClick}

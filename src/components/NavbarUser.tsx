@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const NavbarUser = () => {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-gray-100 py-4 flex justify-around items-center rounded-t-xl shadow-md">
+    <footer className="fixed bottom-0 left-0 right-0 bg-gray-100 py-4 flex justify-around items-center rounded-t-xl shadow-md z-50">
       <NavButton href="/user/home" svg={homeIcon} />
       <NavButton href="/user/orders" svg={ordersIcon} />
       <NavButton href="/user/cart" svg={cartIcon} />
