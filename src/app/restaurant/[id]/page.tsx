@@ -1,17 +1,31 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../../services/api/axiosInstance';
-import { IMenuItem, IRestaurant } from '@/types';
+import { IMenuItem, IOrderItem, IRestaurant } from '@/types';
 import NavbarUser from '@/components/NavbarUser';
 import RestaurantList from '@/components/RestaurantList';
 import Bestsellers from '@/components/Bestsellers';
+import { useCart } from '@/contexts/CartContext';
 
 const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const [restaurant, setRestaurant] = useState<IRestaurant | null>(null);
   const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
-  const [cart, setCart] = useState<IMenuItem[]>([]);
   const [error, setError] = useState('');
+  const [alert, setAlert] = useState(false);
+
+  const { addToCart, cart } = useCart();
+
+  const handleAddToCart = (item: IMenuItem) => {
+    const orderItem: IOrderItem = {
+      menuItem: item,
+      quantity: 1,
+    };
+    addToCart(orderItem);
+    setAlert(true);
+    setTimeout(() => setAlert(false), 2000);
+    console.log('CART:', cart);
+  };
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
@@ -36,10 +50,6 @@ const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
     console.log('Clicked restaurant:', restaurantId);
   };
 
-  const addToCart = (menuItem: IMenuItem) => {
-    setCart((prevCart) => [...prevCart, menuItem]);
-  };
-
   if (error) {
     return <div>{error}</div>;
   }
@@ -57,25 +67,30 @@ const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
       <Bestsellers items={menuItems} />
       <h2 className="text-l font-bold mb-4">Menu</h2>
       <ul className="space-y-4">
-  {menuItems.map((item) => (
-    <React.Fragment key={item.menuItem_id}>
-      <div className="h-[0.5px] bg-black w-screen relative left-[-2rem]"></div>
-      <li className="flex items-center justify-between bg-white rounded-lg">
-        <div className="flex-1 pr-2">
-          <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-gray-500 text-sm">{item.description}</p>
-          <p className="text-gray-700 mt-1">{item.price} €</p>
+        {menuItems.map((item) => (
+          <React.Fragment key={item.menuItem_id}>
+            <div className="h-[0.5px] bg-black w-screen relative left-[-2rem]"></div>
+            <li className="flex items-center justify-between bg-white rounded-lg">
+              <div className="flex-1 pr-2">
+                <h3 className="font-semibold">{item.name}</h3>
+                <p className="text-gray-500 text-sm">{item.description}</p>
+                <p className="text-gray-700 mt-1">{item.price} €</p>
+              </div>
+              <button
+                onClick={() => handleAddToCart(item)}
+                className="border-2 border-[#FF7F7F] text-[#FF7F7F] rounded-full w-5 h-5 flex items-center justify-center transition-all duration-200 hover:bg-[#FF7F7F] hover:text-white">
+                +
+              </button>
+            </li>
+          </React.Fragment>
+        ))}
+      </ul>
+
+      {alert && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white text-center p-5 rounded z-50">
+          Item added to cart!
         </div>
-        <button
-          onClick={() => addToCart(item)}
-          className="border-2 border-[#FF7F7F] text-[#FF7F7F] rounded-full w-5 h-5 flex items-center justify-center transition-all duration-200 hover:bg-[#FF7F7F] hover:text-white"
-        >
-          +
-        </button>
-      </li>
-    </React.Fragment>
-  ))}
-</ul>
+      )}
 
       <NavbarUser />
     </div>

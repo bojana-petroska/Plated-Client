@@ -1,26 +1,43 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useCart } from '@/contexts/CartContext';
 
 const NavbarUser = () => {
+  const { totalQuantity } = useCart();
+  console.log('Rendering NavbarUser, cart length:', totalQuantity);
+
   return (
     <footer className="fixed bottom-0 left-0 right-0 bg-gray-100 py-4 flex justify-around items-center rounded-t-xl shadow-md z-50">
       <NavButton href="/user/home" svg={homeIcon} />
       <NavButton href="/user/orders" svg={ordersIcon} />
-      <NavButton href="/user/cart" svg={cartIcon} />
+      <NavButton href="/user/cart" svg={cartIcon}>
+        {totalQuantity > 0 && (
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center border border-white">
+            {totalQuantity}
+          </span>
+        )}
+      </NavButton>
       <NavButton href="/user/profile" svg={profileIcon} />
     </footer>
   );
 };
 
-const NavButton: React.FC<{ href: string; svg: string }> = ({ href, svg }) => {
+const NavButton: React.FC<{
+  href: string;
+  svg: string;
+  children?: React.ReactNode;
+}> = ({ href, svg, children }) => {
   return (
-    <Link href={href} className="relative flex items-center justify-center w-12 h-12 bg-gray-100 text-black rounded-full hover:bg-black hover:text-white transition-all duration-300"
-    aria-label="Navigation Button">
-        <span
-          className="absolute inset-0 flex items-center justify-center"
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
+    <Link
+      href={href}
+      className="relative flex items-center justify-center w-12 h-12 bg-gray-100 text-black rounded-full hover:bg-black hover:text-white transition-all duration-300"
+      aria-label="Navigation Button">
+      <span
+        className="absolute inset-0 flex items-center justify-center"
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
+      {children}
     </Link>
   );
 };
