@@ -2,8 +2,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import restaurantAuthService from '../../../../services/authRestaurantService';
+import { useRestaurant } from '@/contexts/RestaurantContext';
+
 const RestaurantSignUpPage = () => {
   const router = useRouter();
+  const { setRestaurantId } = useRestaurant();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,25 +15,34 @@ const RestaurantSignUpPage = () => {
     e.preventDefault();
 
     try {
-      const signUpResponse = await restaurantAuthService.signup({ name, password });
+      const signUpResponse = await restaurantAuthService.signup({
+        name,
+        password,
+      });
       console.log('Sign up response:', signUpResponse);
-  
-      const signInResponse = await restaurantAuthService.signin({ name, password });
-      const { token, restaurantId } = signInResponse.data.data;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('restaurantId', restaurantId);
-      }
+
+      const signInResponse = await restaurantAuthService.signin({
+        name,
+        password,
+      });
+      const { token, restaurant_id } = signInResponse.data.data;
+
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('restaurant_id', restaurant_id);
       console.log('TOKEN IN HANDLE SIGN UP', token);
-  
+
+      setRestaurantId(restaurant_id);
+      console.log('Restaurant ID from sign-up:', restaurant_id);
+
       router.push('/restaurant/home');
     } catch (err) {
       const errorMessage =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Sign up failed.';
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message || 'Sign up failed.';
       setError(errorMessage);
     }
   };
-  
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-md p-8 bg-white rounded shadow">

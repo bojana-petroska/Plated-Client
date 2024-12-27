@@ -71,6 +71,10 @@ export interface IOrder {
     restaurant_id: number;
     name: string;
   };
+  user?: {
+    user_id: number;
+    userName: string;
+  };
 }
 
 export type OrderInput = Omit<

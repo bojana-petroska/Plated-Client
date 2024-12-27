@@ -3,6 +3,8 @@ import '../styles/globals.css';
 import React from 'react';
 import { CartProvider } from '@/contexts/CartContext';
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal';
+import { RestaurantProvider } from '@/contexts/RestaurantContext';
+import { RoleProvider } from '@/contexts/RoleContext';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,14 +16,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log('Rendering RootLayout');
   return (
     <html lang="en">
       <head />
       <body>
-        <CartProvider>
-          {children}
-          <ConfirmDeleteModal />
-        </CartProvider>
+        <RestaurantProvider>
+          <RoleProvider>
+            <CartProvider>
+              {children}
+              <ConfirmDeleteModal />
+            </CartProvider>
+          </RoleProvider>
+        </RestaurantProvider>
       </body>
     </html>
   );

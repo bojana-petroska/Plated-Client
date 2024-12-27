@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import restaurantAuthService from '../../../../services/authRestaurantService';
+import { useRestaurant } from '@/contexts/RestaurantContext';
 
 const RestaurantSignInPage = () => {
   const router = useRouter();
+  const { setRestaurantId } = useRestaurant();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,10 +17,14 @@ const RestaurantSignInPage = () => {
       const response = await restaurantAuthService.signin({ name, password });
       console.log(response);
       console.log(response.data.success);
-      const { token, refreshToken } = response.data.data;
+      const { token, refreshToken, restaurant_id } = response.data.data;
       
       localStorage.setItem('authToken', token);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('restaurantId', restaurant_id);
+
+      setRestaurantId(restaurant_id);
+      console.log('Restaurant ID from sign-IN:', restaurant_id);
 
       console.log('TOKEN FROM HANDLE SIGN IN', token);
       router.push('/restaurant/home');

@@ -6,9 +6,11 @@ import NavbarUser from '@/components/NavbarUser';
 import RestaurantList from '@/components/RestaurantList';
 import Bestsellers from '@/components/Bestsellers';
 import { useCart } from '@/contexts/CartContext';
+import { useRestaurant } from '@/contexts/RestaurantContext';
 
 const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
+  const { setRestaurantId } = useRestaurant();
   const [restaurant, setRestaurant] = useState<IRestaurant | null>(null);
   const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
   const [error, setError] = useState('');
@@ -28,6 +30,9 @@ const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
   };
 
   useEffect(() => {
+    if (setRestaurantId) {
+      setRestaurantId(id);
+    }
     const fetchRestaurantDetails = async () => {
       try {
         const restaurantResponse = await axiosInstance.get(
@@ -44,7 +49,7 @@ const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
     };
 
     fetchRestaurantDetails();
-  }, [id]);
+  }, [id, setRestaurantId]);
 
   const handleRestaurantClick = (restaurantId: number | undefined) => {
     console.log('Clicked restaurant:', restaurantId);
