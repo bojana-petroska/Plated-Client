@@ -1,11 +1,13 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import Button from '@/components/Buttons';
 import axiosInstance from '@/services/api/axiosInstance';
 import { useRestaurant } from '@/contexts/RestaurantContext';
+import { IUser } from '@/types';
 
 const CartPage = () => {
+  const [user, setUser] = useState<IUser | null>(null);
   const { cart, totalQuantity, updateItemQuantity } = useCart();
   const { restaurant_id } = useRestaurant();
   console.log('Restaurant ID FROM CONTEXT IN CART PAGE:', restaurant_id);
@@ -35,6 +37,7 @@ const CartPage = () => {
 
     try {
       const response = await axiosInstance.post('/orders', {
+        userName: user?.userName,
         restaurant_id: restaurant_id,
         orderItems: cart.map((item) => ({
           menuItem: item.menuItem,
@@ -53,6 +56,19 @@ const CartPage = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosInstance.get('/users/profile');
+        setUser(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      } 
+    };
+
+    fetchUserData();
+  }, []);
+console.log(user)
   return (
     <div className="container mx-auto mt-10">
       {alertVisible && (

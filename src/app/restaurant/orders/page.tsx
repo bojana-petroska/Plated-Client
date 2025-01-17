@@ -48,6 +48,7 @@ const RestaurantOrderNotifications = () => {
       socketService.getSocket().off('orderCreated');
     };
   }, []);
+  console.log(orders);
 
   return (
     <div>
@@ -57,9 +58,8 @@ const RestaurantOrderNotifications = () => {
       <ul>
         {orders.map((order, index) => (
           <li key={index}>
-            Order ID: {order.order_id}, Customer ID: {order.user?.userName}, Items:{' '}
-            {order.orderItems.map((item) => item.menuItem).join(', ')}, Total:{' '}
-            {order.totalPrice}
+            Order ID: {order.order_id}, Customer name: {order.user?.userName}, Items: {order.orderItems.map((item) => item.menuItem.name).join(', ')}, Total: {order.totalPrice}, order status: {order.status}, 
+            {/* date: {order.createdAt?.toISOString()} */}
           </li>
         ))}
       </ul>
