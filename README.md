@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Food Ordering Online System (Work in Progress)
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This is the **frontend implementation** of **Plated**, a food ordering platform that connects users with restaurants for browsing and ordering food with live updates. The app is built with **Next.js** and features a user-friendly interface, real-time notifications, and dynamic cart updates.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[Figma Design](https://www.figma.com/proto/eGNq2Xx8ZPKMoEEAZwV9rZ/Plated---Bojana?node-id=1534-1481&p=f&t=F5RrhT0sZiHNQwnr-9&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1534%3A1481&show-proto-sidebar=1)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### User
+- **Explore Restaurants**: Browse and view details of restaurants, including menus.
+- **Order Management**: Add items to the cart, review orders, and place them directly.
+- **Profile Management**: Users can view and update personal information.
+- **Real-Time Notifications**: Users receive updates on order statuses directly via live notifications.
 
-## Learn More
+### Restaurant (Future Implementation)
+- **Dashboard**: Manage menus, view and process orders, receives notifications and update restaurant details.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technologies Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend Framework**: Next.js (React)
+- **Styling**: TailwindCSS
+- **State Management**: Context API for managing user and cart states.
+- **API Integration**: Axios for making RESTful API calls.
+- **Real-Time Communication**: Socket.IO for WebSocket integration.
+- **Image Hosting**: Cloudinary.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Future Improvements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Implement a restaurant dashboard for managing menus and orders.
+- Extend WebSocket functionality for real-time live chat between users and couriers.
+- Add unit and integration testing for key components and pages.
+- Optimize UI/UX for a more intuitive user experience.
