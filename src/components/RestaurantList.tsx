@@ -32,7 +32,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
 
           <div className="absolute right-[-40px] top-15 w-40 h-40 overflow-hidden rounded-full">
             <img
-              src="/img/hero.jpg"
+              src={restaurant.imageUrl || "/img/hero.jpg"}
               alt={restaurant.name}
               className="object-cover w-full h-full"
             />

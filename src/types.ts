@@ -18,6 +18,7 @@ export interface IRestaurant {
   menu?: IMenuItem[];
   isOpen?: boolean;
   rating?: number;
+  imageUrl?: string;
 }
 
 export type RestaurantInput = Omit<IRestaurant, 'restaurant_id' | 'menu'>;

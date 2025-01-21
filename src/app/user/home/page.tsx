@@ -53,8 +53,10 @@ const HomePage: React.FC = () => {
         const totalRecords = response?.data.totalItems || 0;
         setRestaurants(fetchedRestaurants);
 
-        const newFilteredRestaurants = [...filteredRestaurants, ...fetchedRestaurants]
-        setFilteredRestaurants(newFilteredRestaurants);
+        // const newFilteredRestaurants = [...filteredRestaurants, ...fetchedRestaurants]
+        
+        setFilteredRestaurants(fetchedRestaurants);
+        console.log('filteredRestaurants:', filteredRestaurants);
         setTotalPages(Math.ceil(totalRecords / 10));
         console.log('Total Pages:', Math.ceil(totalRecords / 10));
       } catch (error) {
@@ -66,6 +68,10 @@ const HomePage: React.FC = () => {
 
     fetchRestaurants();
   }, [page]);
+
+  useEffect(() => {
+    console.log('Updated filteredRestaurants:', filteredRestaurants);
+  }, [filteredRestaurants]);  
 
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
@@ -126,7 +132,7 @@ const HomePage: React.FC = () => {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}
-              className={`px-4 py-2 rounded ${
+              className={`px-2 py-1 rounded ${
                 page === index + 1
                   ? 'bg-pink-500 text-white'
                   : 'bg-gray-200 text-gray-800'
