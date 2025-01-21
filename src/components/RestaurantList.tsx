@@ -25,7 +25,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
               <span>⏱ {restaurant.openingHours}</span>
             </div>
             <div className="mt-2 text-sm text-yellow-600 font-bold">
-              ★ {restaurant.rating || 'N/A'}
+              ★ open {restaurant.isOpen}
             </div>
             <p className="mt-2 text-sm text-gray-600">Min Order: €10</p>
           </div>

@@ -5,7 +5,6 @@ import { IRestaurant, IUser } from '@/types';
 import axiosInstance from '@/services/api/axiosInstance';
 import Header from '@/components/Header';
 import GradientHeading from '@/components/GradientHeading';
-import Button from '@/components/Buttons';
 import FoodTypes from '@/components/FoodType';
 import NavbarUser from '@/components/NavbarUser';
 import RestaurantList from '@/components/RestaurantList';
@@ -21,7 +20,7 @@ const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -43,20 +42,21 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     const fetchRestaurants = async () => {
-      if (!hasMore || loading) return;
-
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/restaurants?page=${page}`);
+        const response = await axiosInstance.get(
+          `/restaurants?page=${page}&limit=10`
+        );
         const fetchedRestaurants = Array.isArray(response?.data?.data)
           ? response.data.data
           : [];
-        setRestaurants((prev) => [...prev, ...fetchedRestaurants]);
-        setFilteredRestaurants((prev) => [...prev, ...fetchedRestaurants]);
+        const totalRecords = response?.data.totalItems || 0;
+        setRestaurants(fetchedRestaurants);
 
-        if (fetchedRestaurants.length < 20) {
-          setHasMore(false);
-        }
+        const newFilteredRestaurants = [...filteredRestaurants, ...fetchedRestaurants]
+        setFilteredRestaurants(newFilteredRestaurants);
+        setTotalPages(Math.ceil(totalRecords / 10));
+        console.log('Total Pages:', Math.ceil(totalRecords / 10));
       } catch (error) {
         console.error('Failed to fetch restaurants:', error);
       } finally {
@@ -65,37 +65,10 @@ const HomePage: React.FC = () => {
     };
 
     fetchRestaurants();
-  }, [page, hasMore, loading]);
+  }, [page]);
 
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      setFilteredRestaurants(restaurants);
-    } else {
-      const keywords = searchQuery.toLowerCase().split(/\s+/);
-
-      const filtered = restaurants.filter((restaurant) => {
-        const nameMatch = keywords.some((keyword) =>
-          restaurant.name.toLowerCase().includes(keyword)
-        );
-
-        const menuItemsMatch = restaurant.menu?.some(
-          (menuItem: { name: string }) =>
-            keywords.some((keyword) =>
-              menuItem.name.toLowerCase().includes(keyword)
-            )
-        );
-
-        return nameMatch || menuItemsMatch;
-      });
-
-      setFilteredRestaurants(filtered);
-    }
-  }, [searchQuery, restaurants]);
-
-  const loadMoreRestaurants = () => {
-    if (!loading && hasMore) {
-      setPage((prev) => prev + 1);
-    }
+  const handlePageClick = (pageNumber: number) => {
+    setPage(pageNumber);
   };
 
   const handleRestaurantClick = async (restaurantId: number | undefined) => {
@@ -142,24 +115,27 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <main className="flex-1 overflow-y-auto px-4">
+      <main className="flex-1 overflow-y-auto px-4 pb-[60px]">
+        {' '}
         <h2 className="text-xl mb-4">Restaurants near you</h2>
         <RestaurantList
-          filteredRestaurants={filteredRestaurants}
+          filteredRestaurants={restaurants}
           handleRestaurantClick={handleRestaurantClick}
         />
-        {loading && <p>Loading more restaurants...</p>}
-        {!loading && hasMore && (
-          <div className="flex justify-center mt-4">
-            <Button
-              text="Load More Restaurants"
-              type="pink"
-              size="small"
-              onClick={loadMoreRestaurants}
-            />
-          </div>
-        )}
-        {!hasMore && <p>No more restaurants available.</p>}
+        <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 space-y-2 pb-[60px]">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              className={`px-4 py-2 rounded ${
+                page === index + 1
+                  ? 'bg-pink-500 text-white'
+                  : 'bg-gray-200 text-gray-800'
+              } hover:bg-pink-400`}
+              onClick={() => handlePageClick(index + 1)}>
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </main>
       <NavbarUser />
     </div>

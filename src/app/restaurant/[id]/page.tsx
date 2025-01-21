@@ -71,7 +71,7 @@ const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
       />
       <Bestsellers items={menuItems} />
       <h2 className="text-l font-bold mb-4">Menu</h2>
-      <ul className="space-y-4">
+      <ul className="space-y-4 pb-[100px]">
         {menuItems.map((item) => (
           <React.Fragment key={item.menuItem_id}>
             <div className="h-[0.5px] bg-black w-screen relative left-[-2rem]"></div>
