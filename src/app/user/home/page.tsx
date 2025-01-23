@@ -51,14 +51,9 @@ const HomePage: React.FC = () => {
           ? response.data.data
           : [];
         const totalRecords = response?.data.totalItems || 0;
-        setRestaurants(fetchedRestaurants);
-
-        // const newFilteredRestaurants = [...filteredRestaurants, ...fetchedRestaurants]
-        
+        setRestaurants(fetchedRestaurants);        
         setFilteredRestaurants(fetchedRestaurants);
-        console.log('filteredRestaurants:', filteredRestaurants);
         setTotalPages(Math.ceil(totalRecords / 10));
-        console.log('Total Pages:', Math.ceil(totalRecords / 10));
       } catch (error) {
         console.error('Failed to fetch restaurants:', error);
       } finally {
@@ -68,11 +63,7 @@ const HomePage: React.FC = () => {
 
     fetchRestaurants();
   }, [page]);
-
-  useEffect(() => {
-    console.log('Updated filteredRestaurants:', filteredRestaurants);
-  }, [filteredRestaurants]);  
-
+  
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
   };
