@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import restaurantAuthService from '../../../../services/authRestaurantService';
 import { useRestaurant } from '@/contexts/RestaurantContext';
+import Button from '@/components/Buttons';
 
 const RestaurantSignInPage = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const RestaurantSignInPage = () => {
       console.log(response);
       console.log(response.data.success);
       const { token, refreshToken, restaurant_id } = response.data.data;
-      
+
       localStorage.setItem('authToken', token);
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('restaurantId', restaurant_id);
@@ -36,19 +37,19 @@ const RestaurantSignInPage = () => {
       setError(errorMessage);
     }
   };
+
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow">
-        <h2 className="text-2xl font-bold mb-6">Sign In</h2>
-        {error && <p className="text-red-500">{error}</p>}
-        <form onSubmit={handleSignIn} className="space-y-4">
+    <div className="flex justify-center items-center h-screen bg-gray-50">
+      <div className="w-full max-w-sm p-8 bg-white rounded-xl shadow-md">
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        <form onSubmit={handleSignIn} className="space-y-6">
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Restaurant Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="input-class"
+            className="w-full px-4 py-3 border rounded-[15px] focus:ring-2 focus:ring-pink-400"
           />
           <input
             type="password"
@@ -56,12 +57,27 @@ const RestaurantSignInPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="input-class"
+            className="w-full px-4 py-3 border rounded-[15px] focus:ring-2 focus:ring-pink-400"
           />
-          <button type="submit" className="btn-class">
-            Sign In
-          </button>
+          <div className="flex justify-between items-center text-sm text-gray-500">
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" className="rounded" />
+              <span>Remember me</span>
+            </label>
+            <button type="button" className="hover:underline">
+              Forgot password?
+            </button>
+          </div>
+          <Button text="Sign in" type="pink" onClick={() => {}} />
         </form>
+        <p className="text-center mt-6 text-sm text-gray-500">
+          Don’t have an account?{' '}
+          <button
+            onClick={() => router.push('/restaurant/auth/signup')}
+            className="text-pink-500 hover:underline">
+            Sign up!
+          </button>
+        </p>
       </div>
     </div>
   );
