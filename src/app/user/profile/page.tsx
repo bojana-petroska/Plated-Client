@@ -1,9 +1,11 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import axiosInstance from '../../../services/api/axiosInstance';
 import { useRouter } from 'next/navigation';
 import { IUser } from '@/types';
+import axiosInstance from '../../../services/api/axiosInstance';
 import NavbarUser from '@/components/NavbarUser';
+import ImageUploader from '@/components/ImageUploader';
+import useClickOutside from '@/hooks/useClickOutside';
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -18,7 +20,14 @@ const ProfilePage = () => {
     email: '',
   });
   const [loading, setLoading] = useState(true);
-  const editRef = useRef(null);
+  const editRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(editRef, (e) => {
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    setIsEditing(false);
+  });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -55,10 +64,13 @@ const ProfilePage = () => {
   };
 
   const handleSave = async () => {
+    console.log('handleSave triggered');
     if (!user) {
       alert('User data is not loaded yet.');
       return;
     }
+
+    console.log('Sending form data:', formData);
 
     try {
       const response = await axiosInstance.put(
@@ -74,65 +86,30 @@ const ProfilePage = () => {
     }
   };
 
-  const handleClickOutside = (e: React.MouseEvent) => {
-    if (editRef.current && !editRef.current.contains(e.target as Node)) {
-      setIsEditing(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  const handleImageUpdate = (imageUrl: string) => {
+    setUser((prev) => ({
+      ...prev,
+      profilePicture: imageUrl,
+    }));
+  };
+
   return (
     <div className="min-h-screen flex bg-white flex-col justify-between px-4 pt-6 font-montserrat">
       <div className="w-full max-w-md mx-auto rounded-xl p-3">
-        {/* Header Section */}
         <div className="flex items-end mb-6">
           <h1 className="text-2xl text-[#323232]">My Account</h1>
           <div className="relative ml-auto text-center">
-            <img
-              src="/img/dessert.png"
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover mx-auto"
+            <ImageUploader
+              userId={user?.user_id || 0}
+              currentImage={user?.profilePicture || null}
+              onImageUpdate={handleImageUpdate}
             />
-            <span
-              className="text-sm text-[#323232] underline cursor-pointer mt-4 block"
-              onClick={() => setIsEditing(true)}>
-              edit
-            </span>
-            <div className="absolute top-0 right-0">
-              <svg
-                width="26"
-                height="26"
-                viewBox="0 0 26 26"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="cursor-pointer">
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M12.2633 6.69043H5.41667C4.21958 6.69043 3.25 7.71851 3.25 8.98493V20.4553C3.25 21.7228 4.21958 22.7498 5.41667 22.7498H17.3333C18.5304 22.7498 19.5 21.7228 19.5 20.4553V12.0594L15.2598 16.5488C14.8896 16.9447 14.4073 17.2183 13.8775 17.3331L10.9731 17.9484C9.07725 18.3493 7.40675 16.5802 7.78592 14.5738L8.36658 11.4983C8.47167 10.9436 8.7295 10.4333 9.10758 10.0336L12.2633 6.69043Z"
-                  fill="#FF7F7F"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M21.4998 4.67777C21.3903 4.40047 21.2297 4.14618 21.0264 3.92811C20.8265 3.71483 20.5855 3.54421 20.3179 3.42652C20.0543 3.31075 19.7695 3.25098 19.4816 3.25098C19.1937 3.25098 18.9089 3.31075 18.6452 3.42652C18.3777 3.54421 18.1367 3.71483 17.9367 3.92811L17.3452 4.55427L20.4349 7.82594L21.0264 7.19869C21.2319 6.98227 21.3927 6.72754 21.4998 6.44902C21.723 5.87969 21.723 5.2471 21.4998 4.67777ZM18.9042 9.44769L15.8134 6.17494L10.6383 11.6566C10.562 11.738 10.5105 11.8394 10.4899 11.9491L9.90925 15.0258C9.83342 15.4266 10.1682 15.7798 10.5463 15.6996L13.4518 15.0854C13.5575 15.0618 13.6537 15.0071 13.728 14.9283L18.9042 9.44769Z"
-                  fill="#FF7F7F"
-                />
-              </svg>
-            </div>
           </div>
         </div>
-
         <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-4" ref={editRef}>
           {[
             'userName',
@@ -144,11 +121,7 @@ const ProfilePage = () => {
           ].map((field) => (
             <div
               key={field}
-              className={`flex justify-between items-center ${
-                field === 'phoneNumber'
-                  ? ''
-                  : 'border-b-[0.3px] border-[#323232] pb-2'
-              }`}>
+              className={`flex justify-between items-center ${field === 'phoneNumber' ? '' : 'border-b-[0.3px] border-[#323232] pb-2'}`}>
               <span className="text-[#323232] capitalize">
                 {field.replace(/([A-Z])/g, ' $1')}
               </span>
@@ -163,25 +136,35 @@ const ProfilePage = () => {
             </div>
           ))}
         </div>
-
-        {isEditing && (
-          <div className="mt-4 flex justify-between items-center">
+        <div className="mt-4 flex justify-between items-center">
+          <button
+            onClick={() => setIsEditing(!isEditing)}
+            className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300">
+            {isEditing ? 'Cancel' : 'Edit'}
+          </button>
+          {isEditing && (
             <button
-              onClick={handleSave}
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('Button clicked!!!');
+                handleSave();
+              }}
               className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300">
               Save Changes
             </button>
-          </div>
-        )}
-
+          )}
+        </div>
         <div className="mt-4 bg-[#F8F8F8] rounded-lg p-4 space-y-2">
           <div className="border-b-[0.3px] border-[#323232] pb-2 text-gray-800">
             Log Out
           </div>
-          <div className="text-gray-800">Delete Account</div>
+          <div
+            className="cursor-pointer"
+            onClick={() => localStorage.removeItem('authToken')}>
+            Delete Account
+          </div>
         </div>
       </div>
-
       <NavbarUser />
     </div>
   );

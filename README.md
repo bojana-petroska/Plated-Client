@@ -28,7 +28,7 @@ This is the **frontend implementation** of **Plated**, a food ordering platform 
 - **State Management**: Context API for managing user and cart states.
 - **API Integration**: Axios for making RESTful API calls.
 - **Real-Time Communication**: Socket.IO for WebSocket integration.
-- **Image Hosting**: Cloudinary.
+- **Image Hosting**: S3 Bucket.
 
 ---
 
