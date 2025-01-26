@@ -18,7 +18,7 @@ const LandingScreenUser = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-blue-500 transition-all duration-500 relative text-center">
+    <div className="flex flex-col justify-center items-center h-screen transition-all duration-500 relative text-center">
       <img
         src="/img/hero.jpg"
         alt="Hero"
@@ -37,7 +37,7 @@ const LandingScreenUser = () => {
       </h1>
 
       {showButtons && (
-        <div className="flex flex-col items-center space-y-4 z-10 justify-center text-center">
+        <div className="flex flex-col space-y-4 z-10 w-96">
           <Button
             onClick={() => router.push('/user/auth/signin')}
             text="Sign in"

@@ -36,7 +36,7 @@ const LandingScreenRestaurant = () => {
       </h1>
 
       {showButtons && (
-        <div className="flex flex-col items-center space-y-4 z-10 justify-center text-center">
+        <div className="flex flex-col items-center space-y-4 z-10 justify-center text-center w-96">
           <Button
             onClick={() => router.push('/restaurant/auth/signin')}
             text="Sign in"
