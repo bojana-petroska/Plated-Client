@@ -18,6 +18,7 @@ interface CartContextProps {
   itemToDelete: IOrderItem | null;
   confirmDelete: (confirm: boolean) => void;
   cancelDelete: () => void;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextProps | null>(null);
@@ -100,6 +101,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     setItemToDelete(null);
   };
 
+  const clearCart = () => {
+    setCart([]);
+  };  
+
   useEffect(() => {
     console.log('Updated Cart:', cart);
   }, [cart]);
@@ -115,6 +120,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         itemToDelete,
         confirmDelete,
         cancelDelete,
+        clearCart
       }}>
       {children}
     </CartContext.Provider>

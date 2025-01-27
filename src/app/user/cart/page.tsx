@@ -5,10 +5,11 @@ import Button from '@/components/Buttons';
 import axiosInstance from '@/services/api/axiosInstance';
 import { useRestaurant } from '@/contexts/RestaurantContext';
 import { IUser } from '@/types';
+import NavbarUser from '@/components/NavbarUser';
 
 const CartPage = () => {
   const [user, setUser] = useState<IUser | null>(null);
-  const { cart, totalQuantity, updateItemQuantity } = useCart();
+  const { cart, updateItemQuantity, clearCart } = useCart();
   const { restaurant_id } = useRestaurant();
   console.log('Restaurant ID FROM CONTEXT IN CART PAGE:', restaurant_id);
   const [alertVisible, setAlertVisible] = useState(false);
@@ -47,6 +48,8 @@ const CartPage = () => {
 
       console.log('Order created:', response.data);
 
+      clearCart();
+
       setAlertVisible(true);
       setTimeout(() => {
         setAlertVisible(false);
@@ -76,9 +79,6 @@ console.log(user)
           Order Created Successfully!
         </div>
       )}
-      <div className="fixed top-4 right-4 bg-green-500 text-white rounded-full flex items-center justify-center p-3 z-50">
-        <span className="font-bold">{totalQuantity}</span>
-      </div>
 
       <div className="bg-white rounded-lg p-6 shadow-lg">
         {cart.map((item, index) => (
@@ -127,6 +127,7 @@ console.log(user)
           />
         </div>
       </div>
+      <NavbarUser />
     </div>
   );
 };
