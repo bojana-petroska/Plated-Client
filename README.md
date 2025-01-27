@@ -20,7 +20,7 @@ This is the **frontend implementation** of **Plated**, a food ordering platform 
 - **Dashboard**: Manage menus, view and process orders and update restaurant details.
 - **Real-Time Notifications**: Receive notifications from the user for orders and sends updates for order status to the courier.
 
-### Restaurant
+### Courier
 - **Real-Time Notifications**: Receive notifications from the restaurant for order pick up and sends updates for order status to the user.
 
 ---
