@@ -16,8 +16,12 @@ This is the **frontend implementation** of **Plated**, a food ordering platform 
 - **Profile Management**: Users can view and update personal information.
 - **Real-Time Notifications**: Users receive updates on order statuses directly via live notifications.
 
-### Restaurant (Future Implementation)
-- **Dashboard**: Manage menus, view and process orders, receives notifications and update restaurant details.
+### Restaurant
+- **Dashboard**: Manage menus, view and process orders and update restaurant details.
+- **Real-Time Notifications**: Receive notifications from the user for orders and sends updates for order status to the courier.
+
+### Restaurant
+- **Real-Time Notifications**: Receive notifications from the restaurant for order pick up and sends updates for order status to the user.
 
 ---
 
