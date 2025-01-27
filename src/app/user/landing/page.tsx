@@ -28,7 +28,7 @@ const LandingScreenUser = () => {
       <img
         src="/img/logo.jpg"
         alt="Logo"
-        className={`transition-all duration-500 ${moveLogo ? 'mt-12' : 'mt-0'} w-32 h-32 z-10`}
+        className={`m-10 rounded-[20px] transition-all duration-500 ${moveLogo ? 'mt-12' : 'mt-0'} w-32 h-32 z-10`}
       />
 
       <h1

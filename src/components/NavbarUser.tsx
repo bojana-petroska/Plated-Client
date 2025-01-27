@@ -2,23 +2,24 @@
 import React from 'react';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
+import { usePathname  } from 'next/navigation';
 
 const NavbarUser = () => {
   const { totalQuantity } = useCart();
-  console.log('Rendering NavbarUser, cart length:', totalQuantity);
+  const pathName = usePathname();
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-gray-100 py-4 flex justify-around items-center rounded-t-xl shadow-md z-50">
-      <NavButton href="/user/home" svg={homeIcon} />
-      <NavButton href="/user/orders" svg={ordersIcon} />
-      <NavButton href="/user/cart" svg={cartIcon}>
+    <footer className="fixed bottom-3 left-3 right-3 bg-gray-100 py-4 flex justify-around items-center rounded-[50px] shadow-md z-50">
+      <NavButton href="/user/home" svg={homeIcon} isActive={pathName === '/user/home'} />
+      <NavButton href="/user/orders" svg={ordersIcon} isActive={pathName === '/user/orders'} />
+      <NavButton href="/user/cart" svg={cartIcon} isActive={pathName === '/user/cart'}>
         {totalQuantity > 0 && (
           <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center border border-white">
             {totalQuantity}
           </span>
         )}
       </NavButton>
-      <NavButton href="/user/profile" svg={profileIcon} />
+      <NavButton href="/user/profile" svg={profileIcon} isActive={pathName === '/user/profile'} />
     </footer>
   );
 };
@@ -26,12 +27,13 @@ const NavbarUser = () => {
 const NavButton: React.FC<{
   href: string;
   svg: string;
+  isActive: boolean;
   children?: React.ReactNode;
-}> = ({ href, svg, children }) => {
+}> = ({ href, svg, isActive, children }) => {
   return (
     <Link
       href={href}
-      className="relative flex items-center justify-center w-12 h-12 bg-gray-100 text-black rounded-full hover:bg-black hover:text-white transition-all duration-300"
+      className={`relative flex items-center justify-center w-12 h-12 ${ isActive ? 'bg-black text-white' : 'bg-gray-100 text-black' } rounded-full hover:bg-black hover:text-white transition-all duration-300`}
       aria-label="Navigation Button">
       <span
         className="absolute inset-0 flex items-center justify-center"
