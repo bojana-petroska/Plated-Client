@@ -19,6 +19,7 @@ interface CartContextProps {
   confirmDelete: (confirm: boolean) => void;
   cancelDelete: () => void;
   clearCart: () => void;
+  setCart: (cart: IOrderItem[]) => void;
 }
 
 const CartContext = createContext<CartContextProps | null>(null);
@@ -31,6 +32,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const [itemToDelete, setItemToDelete] = useState<IOrderItem | null>(null);
 
   const addToCart = (menuItem: IOrderItem) => {
+    console.log("Adding to cart:", menuItem);
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
         (item) => item.menuItem?.menuItem_id === menuItem.menuItem?.menuItem_id
@@ -59,9 +61,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           ? {
               ...item,
               quantity:
-                action === 'increase'
-                  ? item.quantity + 1
-                  : item.quantity - 1,
+                action === 'increase' ? item.quantity + 1 : item.quantity - 1,
             }
           : item
       );
@@ -103,7 +103,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   const clearCart = () => {
     setCart([]);
-  };  
+  };
 
   useEffect(() => {
     console.log('Updated Cart:', cart);
@@ -120,7 +120,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         itemToDelete,
         confirmDelete,
         cancelDelete,
-        clearCart
+        clearCart,
+        setCart,
       }}>
       {children}
     </CartContext.Provider>

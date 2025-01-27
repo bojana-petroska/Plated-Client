@@ -9,10 +9,12 @@ import NavbarUser from '@/components/NavbarUser';
 
 const CartPage = () => {
   const [user, setUser] = useState<IUser | null>(null);
-  const { cart, updateItemQuantity, clearCart } = useCart();
+  const { cart, updateItemQuantity, clearCart, setCart } = useCart();
   const { restaurant_id } = useRestaurant();
   console.log('Restaurant ID FROM CONTEXT IN CART PAGE:', restaurant_id);
   const [alertVisible, setAlertVisible] = useState(false);
+
+  console.log('CartPage rendered, cart:', cart);
 
   const handleUpdateQuantity = (
     id: number | undefined,
@@ -49,6 +51,7 @@ const CartPage = () => {
       console.log('Order created:', response.data);
 
       clearCart();
+      localStorage.removeItem('cart');
 
       setAlertVisible(true);
       setTimeout(() => {
@@ -66,12 +69,21 @@ const CartPage = () => {
         setUser(response.data);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
-      } 
+      }
     };
 
     fetchUserData();
   }, []);
-console.log(user)
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      const parsedCart = JSON.parse(savedCart);
+      setCart(parsedCart);
+      localStorage.removeItem('cart');
+    }
+  }, [setCart]);
+
   return (
     <div className="container mx-auto mt-10">
       {alertVisible && (
