@@ -11,7 +11,7 @@ const OrdersPage = () => {
   const [activeTab, setActiveTab] = useState('history');
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1)
 
   useEffect(() => {
     if (activeTab === 'history') {
@@ -52,20 +52,16 @@ const OrdersPage = () => {
     <div className="p-6">
       <h1 className="text-xl font-semibold mb-4">My Orders</h1>
       <div className="flex space-x-4 mb-6">
-        <button
-          className={`px-4 py-2 rounded ${
-            activeTab === 'favorites' ? 'bg-pink-200' : 'bg-gray-200'
-          }`}
-          onClick={() => setActiveTab('favorites')}>
-          Favorites
-        </button>
-        <button
-          className={`px-4 py-2 rounded ${
-            activeTab === 'history' ? 'bg-pink-200' : 'bg-gray-200'
-          }`}
-          onClick={() => setActiveTab('history')}>
-          History
-        </button>
+        <Button
+          text="Favorites"
+          type={activeTab === 'favorites' ? 'pink' : 'white'}
+          onClick={() => setActiveTab('favorites')}
+        />
+        <Button
+          text="History"
+          type={activeTab === 'history' ? 'pink' : 'white'}
+          onClick={() => setActiveTab('history')}
+        />
       </div>
 
       {activeTab === 'favorites' && (
@@ -82,9 +78,9 @@ const OrdersPage = () => {
                 key={order.order_id}
                 className="flex space-x-4 p-4 bg-gray-100 rounded-lg shadow">
                 <img
-                  src={order.restaurant.imageUrl || '/placeholder.jpg'}
+                  src={order.restaurant.imageUrl || '/img/dessert.png'}
                   alt={order.restaurant.name}
-                  className="w-24 h-24 rounded-lg object-cover"
+                  className="w-24 h-24 rounded-[50px] object-cover"
                 />
 
                 <div className="flex-1">

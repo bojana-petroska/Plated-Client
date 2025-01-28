@@ -16,6 +16,8 @@ const CartPage = () => {
 
   console.log('CartPage rendered, cart:', cart);
 
+  console.log('RESTAURANT ID FROM CONTEXT IN CART PAGE', restaurant_id)
+
   const handleUpdateQuantity = (
     id: number | undefined,
     action: 'increase' | 'decrease'

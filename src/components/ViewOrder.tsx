@@ -4,6 +4,8 @@ import { IOrder } from '@/types';
 import React, { useState, useEffect } from 'react';
 import Button from './Buttons';
 import { useCart } from '@/contexts/CartContext';
+import { useRestaurant } from '@/contexts/RestaurantContext';
+import { useRouter } from 'next/navigation';
 
 interface ViewOrderProps {
   orderId: number;
@@ -14,8 +16,12 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ orderId, onClose }) => {
   const [order, setOrder] = useState<IOrder | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const { setCart } = useCart();
+  const { restaurant_id, setRestaurantId } = useRestaurant();
+
+  console.log('RESTAURANT ID FROM CONTEXT IN VIEW ORDER', restaurant_id);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -44,9 +50,17 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ orderId, onClose }) => {
       const cartItems = order.orderItems.map((item) => ({
         menuItem: item.menuItem,
         quantity: item.quantity,
+        restaurant_id: order.restaurant?.restaurant_id ?? null,
       }));
       setCart(cartItems);
-      window.location.href = '/user/cart';
+
+      if (order.restaurant?.restaurant_id) {
+        setRestaurantId(order.restaurant.restaurant_id.toString());
+      } else {
+        console.error('Restaurant ID is undefined');
+      }
+
+      router.push('/user/cart');
     }
   };
 
