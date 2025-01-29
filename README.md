@@ -33,12 +33,12 @@ This is the **frontend implementation** of **Plated**, a food ordering platform 
 - **API Integration**: Axios for making RESTful API calls.
 - **Real-Time Communication**: Socket.IO for WebSocket integration.
 - **Image Hosting**: S3 Bucket.
+- **Image Hosting**: AWS.
 
 ---
 
 ## Future Improvements
 
-- Implement a restaurant dashboard for managing menus and orders.
 - Extend WebSocket functionality for real-time live chat between users and couriers.
 - Add unit and integration testing for key components and pages.
 - Optimize UI/UX for a more intuitive user experience.
