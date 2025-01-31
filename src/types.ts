@@ -65,9 +65,9 @@ export type UserInput = Pick<IUser, 'userName' | 'email' | 'password'>;
 export enum OrderStatus {
   pending = 'pending',
   preparing = 'preparing',
-  ready = 'ready for pick up',
+  // ready = 'ready for pick up',
   delivered = 'delivered',
-  canceled = 'canceled',
+  // canceled = 'canceled',
 }
 export interface IOrder {
   order_id?: number;

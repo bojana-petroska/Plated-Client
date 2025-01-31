@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import socketService from '../../../services/socket';
-import { IOrder } from '@/types';
+import { IOrder, OrderStatus } from '@/types';
 import axiosInstance from '@/services/api/axiosInstance';
 import { useRestaurant } from '@/contexts/RestaurantContext';
 import NavbarRestaurant from '@/components/NavbarRestaurant';
@@ -56,53 +56,102 @@ const RestaurantOrdersPage = () => {
     };
   }, []);
 
+  const handleStatusChange = async (
+    order_id: number,
+    newStatus: OrderStatus
+  ) => {
+    if (!order_id) {
+      console.error('Invalid order_id:', order_id);
+      return;
+    }
+    
+    try {
+      console.log('Order before status change:', order_id);
+      const response = await axiosInstance.put(`/restaurants/${restaurant_id}/${order_id}/status`, {
+        status: newStatus,
+      });
+      console.log('Order status updated:', response);
+      if (response.status === 201) {
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.order_id === order_id
+              ? { ...order, status: newStatus }
+              : order
+          )
+        );
+
+        if (newStatus !== activeTab) {
+          console.log('DO YOU LISTEN TO ME -> YES')
+          setActiveTab(newStatus);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+    }
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-xl font-semibold mb-4">Orders</h1>
       <div className="flex space-x-4 mb-6 bg-[#F0F0F0] p-2 rounded-xl">
-        <Button
-          text="Pending"
-          type={activeTab === 'pending' ? 'white' : 'grey'}
-          onClick={() => setActiveTab('pending')}
-        />
-        <Button
-          text="Preparing"
-          type={activeTab === 'preparing' ? 'white' : 'grey'}
-          onClick={() => setActiveTab('preparing')}
-        />
-        <Button
-          text="Pick Up"
-          type={activeTab === 'pick up' ? 'white' : 'grey'}
-          onClick={() => setActiveTab('pick up')}
-        />
+        {Object.values(OrderStatus).map((status) => (
+          <Button
+            key={status}
+            text={status}
+            type={activeTab === status ? 'white' : 'grey'}
+            onClick={() => setActiveTab(status)}
+          />
+        ))}
       </div>
       <p>restaurant_id: {restaurant_id}</p>
       <ul className="space-y-4 text-black mb-40">
         {orders.map((order, index) => (
-          <li key={index} className="bg-[#F0F0F0] rounded-xl">
+          <li
+            key={index}
+            className={`bg-[#F0F0F0] rounded-xl ${
+              order.status === activeTab ? 'block' : 'hidden'
+            }`}>
             <p className="p-5 rounded-t-xl text-white font-bold bg-[#323232]">
-              Order ID: {order.order_id} | Status: {order.status}
+              Order Number: {order.order_id} | Status:
+              <select
+                value={order.status}
+                onChange={(e) =>
+                  handleStatusChange(
+                    order?.order_id,
+                    e.target.value as OrderStatus
+                  )
+                }
+                className="ml-2 p-1 rounded bg-[#323232] text-white">
+                {Object.values(OrderStatus).map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
             </p>
-            <p className ="mb-2 mt-2">
+            <p className="mb-2 mt-2">
               <span className="p-5">
                 Customer: {order.user?.firstName} {order.user?.lastName}
               </span>
             </p>
-            <p className ="mb-2 mt-2">
+            <p className="mb-2 mt-2">
               <span className="p-5">Address: {order.user?.address}</span>
             </p>
-            <p className ="mb-2 mt-2">
+            <p className="mb-2 mt-2">
               <span className="p-5">
                 Date: {new Date(order.createdAt).toLocaleDateString()}
               </span>
             </p>
             <p className="pl-5 mb-2 mt-2">
-              <span >
-                Items: {order.orderItems.map((item) => item.menuItem.name).join(', ')}
+              <span>
+                Items:{' '}
+                {order.orderItems.map((item) => item.menuItem.name).join(', ')}
               </span>
             </p>
             <p className="pb-5">
-              <span className="p-5">Total: {order.totalPrice} €</span>
+              <span className="p-5">
+                Total: {order.totalPrice.toFixed(2)} €
+              </span>
             </p>
           </li>
         ))}
