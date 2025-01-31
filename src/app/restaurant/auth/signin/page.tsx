@@ -22,13 +22,13 @@ const RestaurantSignInPage = () => {
 
       localStorage.setItem('authToken', token);
       localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('restaurantId', restaurant_id);
+      localStorage.setItem('restaurant_id', restaurant_id);
 
       setRestaurantId(restaurant_id);
       console.log('Restaurant ID from sign-IN:', restaurant_id);
 
       console.log('TOKEN FROM HANDLE SIGN IN', token);
-      router.push('/restaurant/home');
+      router.push('/restaurant/orders');
     } catch (err) {
       console.log(err);
       const errorMessage =

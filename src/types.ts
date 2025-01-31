@@ -5,6 +5,12 @@ export interface PaginatedResults<T> {
   totalPages: number;
 }
 
+export interface RestaurantSummary {
+  restaurant_id: number;
+  name: string;
+  imageUrl: string;
+}
+
 export interface IRestaurant {
   restaurant_id?: number;
   name: string;
@@ -18,7 +24,7 @@ export interface IRestaurant {
   menu?: IMenuItem[];
   isOpen?: boolean;
   rating?: number;
-  imageUrl?: string;
+  notifications?: INotification[];
 }
 
 export type RestaurantInput = Omit<IRestaurant, 'restaurant_id' | 'menu'>;
@@ -39,6 +45,8 @@ export type MenuItemInput = Omit<IMenuItem, 'menuItem_id'>;
 export interface IUser {
   user_id?: number;
   userName: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   password: string;
   address: string;
@@ -49,6 +57,7 @@ export interface IUser {
   token?: string;
   refreshToken?: string;
   createdAt?: Date;
+  notifications?: INotification[];
 }
 
 export type UserInput = Pick<IUser, 'userName' | 'email' | 'password'>;
@@ -56,11 +65,10 @@ export type UserInput = Pick<IUser, 'userName' | 'email' | 'password'>;
 export enum OrderStatus {
   pending = 'pending',
   preparing = 'preparing',
+  ready = 'ready for pick up',
   delivered = 'delivered',
-  completed = 'completed',
   canceled = 'canceled',
 }
-
 export interface IOrder {
   order_id?: number;
   orderItems: IOrderItem[];
@@ -68,14 +76,9 @@ export interface IOrder {
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
-  restaurant?: {
-    restaurant_id: number;
-    name: string;
-  };
-  user?: {
-    user_id: number;
-    userName: string;
-  };
+  restaurant?: RestaurantSummary;
+  user?: IUser;
+  courier?: ICourier;
 }
 
 export type OrderInput = Omit<
@@ -103,4 +106,32 @@ export interface IOrderItem {
 export enum Availability {
   available = 'available',
   unavailable = 'unavailable',
+}
+
+export interface ICourier {
+  courier_id?: number;
+  name: string;
+  password: string;
+  email: string;
+  phoneNumber: string;
+  availability: Availability;
+  createdAt?: Date;
+  updatedAt?: Date;
+  restaurant?: IRestaurant;
+  user?: IUser;
+  notifications?: INotification[];
+  order: IOrder[];
+}
+
+export type CourierInput = Omit<
+  ICourier,
+  'id' | 'phoneNumber' | 'availability' | 'createdAt' | 'updatedAt'
+>;
+
+export interface INotification {
+  notification_id?: number;
+  content: string;
+  restaurant?: IRestaurant;
+  user?: IUser;
+  courier?: ICourier;
 }

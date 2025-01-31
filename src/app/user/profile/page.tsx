@@ -155,14 +155,12 @@ const ProfilePage = () => {
           )}
         </div>
         <div className="mt-4 bg-[#F8F8F8] rounded-lg p-4 space-y-2">
-          <div className="border-b-[0.3px] border-[#323232] pb-2 text-gray-800">
+          <div
+            className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
+            onClick={() => localStorage.removeItem('authToken')}>
             Log Out
           </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => localStorage.removeItem('authToken')}>
-            Delete Account
-          </div>
+          <div className="cursor-pointer">Delete Account</div>
         </div>
       </div>
       <NavbarUser />
