@@ -27,6 +27,7 @@ const RestaurantOrdersPage = () => {
           console.log('Restaurant data:', response.data);
           if (response) {
             socketService.connect();
+            console.log('Connecting to socket!!', socketService.connect());
             socketService.registerRestaurant(restaurant_id);
           }
         } catch (error) {

@@ -28,7 +28,7 @@ class SocketService {
 
   registerCourier(courierId: string) {
     console.log('Emitting register event for Courier with id:', courierId);
-    this.socket.emit('userRegister', { courierId });
+    this.socket.emit('courierRegister', { courierId });
   }
 
   listenForOrderCreation(callback: (order: IOrder) => void) {

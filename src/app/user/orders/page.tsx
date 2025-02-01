@@ -29,7 +29,7 @@ const OrdersPage = () => {
         console.error('No auth token found.');
         return;
       }
-  
+
       const decodedToken: any = jwtDecode(token);
       const userId = decodedToken.user_id;
 
@@ -37,7 +37,7 @@ const OrdersPage = () => {
         params: {
           page,
           limit: 10,
-          userId
+          userId,
         },
       });
       const fetchedOrders = response.data.data || [];
@@ -61,29 +61,39 @@ const OrdersPage = () => {
     setPage(pageNumber);
   };
 
-  // Listen for order status change to show notifications
+  // listen for order status change from restaurant
   useEffect(() => {
+    console.log('did I start ---> useEffect');
     const token = localStorage.getItem('authToken');
     if (!token) return;
 
     const decodedToken: any = jwtDecode(token);
     const userId = decodedToken.user_id;
 
-    socketService.connect();
-    socketService.registerUser(userId);
-    console.log('Is it the correct userId:', userId )
+    if (activeTab === 'current') {
+      console.log(activeTab);
+      socketService.connect();
+      console.log('Connecting to socket!!', socketService.connect());
+      socketService.registerUser(userId);
+      console.log('Is it the correct userId:', userId);
 
-    socketService.listenForOrderStatusChange((order: IOrder) => {
-      console.log('New order status change. Can you HEAR ME? -> Si', order);
-      if (order.status === 'preparing') {
-        setNotifications((prevNotifications) => [...prevNotifications, order]);
-      }
-    });
+      console.log('Socket connected:', socketService.getSocket().connected);
+      socketService.listenForOrderStatusChange((order: IOrder) => {
+        console.log('New order status change. Can you HEAR ME? -> Si', order);
+        if (order.status === 'preparing') {
+          setNotifications((prevNotifications) => [
+            ...prevNotifications,
+            order,
+          ]);
+        }
+      });
+    }
 
     return () => {
-      socketService.disconnect();
+      console.log('did I just disconnect : (');
+      socketService.getSocket().off('orderStatusChanged');
     };
-  }, []);
+  }, [activeTab]);
 
   return (
     <div className="p-6">
