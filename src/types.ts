@@ -17,6 +17,7 @@ export interface IRestaurant {
   password: string;
   address?: string;
   phoneNumber?: string;
+  imageUrl?: string;
   email?: string;
   openingHours?: string;
   deliveryRadius?: number;

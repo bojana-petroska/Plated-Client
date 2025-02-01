@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import authService from '../../../../services/authService';
 import Button from '@/components/Buttons';
+import { jwtDecode } from 'jwt-decode';
 
 const SignIn = () => {
   const router = useRouter();
@@ -20,6 +21,9 @@ const SignIn = () => {
 
       localStorage.setItem('authToken', token);
       localStorage.setItem('refreshToken', refreshToken);
+
+      const decodedToken: any = jwtDecode(token);
+      localStorage.setItem('userId', decodedToken.user_id);
 
       console.log('TOKEN FROM HANDLE SIGN IN', token);
       router.push('/user/home');
