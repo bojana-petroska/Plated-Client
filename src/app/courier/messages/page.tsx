@@ -1,8 +1,13 @@
 'use client';
 import React from 'react';
+import NavbarCourier from '@/components/NavbarCourier';
+
 const CourierMessage = () => {
   return (
-    <div>messages</div>
+    <div>
+      messages
+      <NavbarCourier />
+    </div>
   );
 };
 
