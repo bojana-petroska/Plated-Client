@@ -6,6 +6,7 @@ import axiosInstance from '../../../services/api/axiosInstance';
 import NavbarUser from '@/components/NavbarUser';
 import ImageUploader from '@/components/ImageUploader';
 import useClickOutside from '@/hooks/useClickOutside';
+import { useUser } from '@/contexts/UserContext';
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -22,6 +23,8 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const editRef = useRef<HTMLDivElement>(null);
 
+  const { user_id } = useUser();
+
   useClickOutside(editRef, (e) => {
     if ((e.target as HTMLElement).closest('button')) {
       return;
@@ -31,8 +34,11 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!user_id) return;
+
       try {
-        const response = await axiosInstance.get('/users/profile');
+        const response = await axiosInstance.get(`/users/${user_id}`);
+        console.log('This is the user:', response.data)
         setUser(response.data);
         setFormData({
           userName: response.data.userName || '',
@@ -53,7 +59,7 @@ const ProfilePage = () => {
     };
 
     fetchUserData();
-  }, [router]);
+  }, [router, user_id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,7 +71,7 @@ const ProfilePage = () => {
 
   const handleSave = async () => {
     console.log('handleSave triggered');
-    if (!user) {
+    if (!user_id) {
       alert('User data is not loaded yet.');
       return;
     }
@@ -74,7 +80,7 @@ const ProfilePage = () => {
 
     try {
       const response = await axiosInstance.put(
-        `/users/${user?.user_id}`,
+        `/users/${user_id}`,
         formData
       );
       setFormData(response.data);
@@ -104,7 +110,7 @@ const ProfilePage = () => {
           <h1 className="text-2xl text-[#323232]">My Account</h1>
           <div className="relative ml-auto text-center">
             <ImageUploader
-              userId={user?.user_id || 0}
+              userId={user_id || 0}
               currentImage={user?.profilePicture || null}
               onImageUpdate={handleImageUpdate}
             />

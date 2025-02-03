@@ -7,6 +7,7 @@ import ViewOrder from '@/components/ViewOrder';
 import { IOrder } from '@/types';
 import { jwtDecode } from 'jwt-decode';
 import socketService from '../../../services/socket';
+import { useUser } from '@/contexts/UserContext';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -15,12 +16,17 @@ const OrdersPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [notifications, setNotifications] = useState<IOrder[]>([]);
+  const { user_id, setUserId } = useUser();
+
+  if (!user_id) {
+    return <div>Loading user data...</div>;
+  }
 
   useEffect(() => {
     if (activeTab === 'history') {
       fetchOrders();
     }
-  }, [activeTab, page]);
+  }, [activeTab, page, user_id]);
 
   const fetchOrders = async () => {
     try {
@@ -30,16 +36,17 @@ const OrdersPage = () => {
         return;
       }
 
-      const decodedToken: any = jwtDecode(token);
-      const userId = decodedToken.user_id;
+      // const decodedToken: any = jwtDecode(token);
+      // const userId = decodedToken.user_id;
 
       const response = await axiosInstance.get('/orders', {
         params: {
           page,
           limit: 10,
-          userId,
+          user_id,
         },
       });
+      console.log(user_id);
       const fetchedOrders = response.data.data || [];
       const totalRecords = response.data.totalItems || 0;
       setOrders(fetchedOrders);
@@ -61,21 +68,26 @@ const OrdersPage = () => {
     setPage(pageNumber);
   };
 
-  // listen for order status change from restaurant
+  // (should) listen for order status change from restaurant
+  // when the restaurant changes the status, it isn't showing inside active tab
   useEffect(() => {
     console.log('did I start ---> useEffect');
     const token = localStorage.getItem('authToken');
-    if (!token) return;
+    if (!token || !user_id) return;
+    console.log(token);
 
-    const decodedToken: any = jwtDecode(token);
-    const userId = decodedToken.user_id;
+    // const decodedToken: any = jwtDecode(token);
+    // const userId = decodedToken.user_id;
+    // console.log('DECODED', decodedToken)
 
     if (activeTab === 'current') {
       console.log(activeTab);
       socketService.connect();
       console.log('Connecting to socket!!', socketService.connect());
-      socketService.registerUser(userId);
-      console.log('Is it the correct userId:', userId);
+      
+      socketService.registerUser(user_id.toString());
+      console.log('Is it the correct userId:', user_id);
+      console.log('userId type:', typeof(user_id));
 
       console.log('Socket connected:', socketService.getSocket().connected);
       socketService.listenForOrderStatusChange((order: IOrder) => {
@@ -93,7 +105,7 @@ const OrdersPage = () => {
       console.log('did I just disconnect : (');
       socketService.getSocket().off('orderStatusChanged');
     };
-  }, [activeTab]);
+  }, [activeTab, user_id]);
 
   return (
     <div className="p-6">

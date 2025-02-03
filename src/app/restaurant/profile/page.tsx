@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { IRestaurant } from '@/types';
 import axiosInstance from '../../../services/api/axiosInstance';
 import NavbarRestaurant from '@/components/NavbarRestaurant';
-// import ImageUploader from '@/components/ImageUploader';
 import useClickOutside from '@/hooks/useClickOutside';
 import { useRestaurant } from '@/contexts/RestaurantContext';
 
@@ -33,8 +32,10 @@ const RestaurantProfilePage = () => {
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await axiosInstance.get(`/restaurants/${restaurant_id}/own`);
-        console.log('RESPONSE:', response.data)
+        const response = await axiosInstance.get(
+          `/restaurants/${restaurant_id}/own`
+        );
+        console.log('RESPONSE:', response.data);
         setRestaurant(response.data);
         setFormData({
           name: response.data.name || '',
@@ -87,28 +88,14 @@ const RestaurantProfilePage = () => {
     return <div>Loading...</div>;
   }
 
-  // const handleImageUpdate = (imageUrl: string) => {
-  //   setRestaurant((prev) => ({
-  //     ...prev,
-  //     profilePicture: imageUrl,
-  //   }));
-  // };
-
   return (
     <div className="min-h-screen flex bg-white flex-col justify-between px-4 pt-6 font-montserrat">
       <div className="w-full max-w-md mx-auto rounded-xl p-3">
         <div className="flex items-end mb-6">
           <h1 className="text-2xl text-[#323232]">Restaurant Profile</h1>
-          {/* <div className="relative ml-auto text-center">
-            <ImageUploader
-              userId={restaurant?.restaurant_id || 0}
-              currentImage={restaurant?.imageUrl || null}
-              onImageUpdate={handleImageUpdate}
-            />
-          </div> */}
         </div>
         <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-4" ref={editRef}>
-          {[ 'name', 'email', 'address', 'phoneNumber'].map((field) => (
+          {['name', 'email', 'address', 'phoneNumber'].map((field) => (
             <div
               key={field}
               className={`flex justify-between items-center ${field === 'phoneNumber' ? '' : 'border-b-[0.3px] border-[#323232] pb-2'}`}>

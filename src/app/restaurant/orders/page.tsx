@@ -54,6 +54,7 @@ const RestaurantOrdersPage = () => {
 
     return () => {
       socketService.getSocket().off('orderCreated');
+      console.log('Order Status Changed:');
     };
   }, []);
 

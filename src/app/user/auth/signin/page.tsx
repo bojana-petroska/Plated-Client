@@ -4,12 +4,14 @@ import { useRouter } from 'next/navigation';
 import authService from '../../../../services/authService';
 import Button from '@/components/Buttons';
 import { jwtDecode } from 'jwt-decode';
+import { useUser } from '@/contexts/UserContext';
 
 const SignIn = () => {
   const router = useRouter();
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { setUserId } = useUser();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,9 @@ const SignIn = () => {
 
       const decodedToken: any = jwtDecode(token);
       localStorage.setItem('userId', decodedToken.user_id);
+      
+      setUserId(decodedToken.user_id);
+      console.log('User ID from CONTEXT:', setUserId(decodedToken.user_id));
 
       console.log('TOKEN FROM HANDLE SIGN IN', token);
       router.push('/user/home');

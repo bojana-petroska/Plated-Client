@@ -5,6 +5,7 @@ import { CartProvider } from '@/contexts/CartContext';
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal';
 import { RestaurantProvider } from '@/contexts/RestaurantContext';
 import { RoleProvider } from '@/contexts/RoleContext';
+import { UserProvider } from '@/contexts/UserContext';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,12 +23,14 @@ export default function RootLayout({
       <head />
       <body>
         <RestaurantProvider>
-          <RoleProvider>
-            <CartProvider>
-              {children}
-              <ConfirmDeleteModal />
-            </CartProvider>
-          </RoleProvider>
+          <UserProvider>
+            <RoleProvider>
+              <CartProvider>
+                {children}
+                <ConfirmDeleteModal />
+              </CartProvider>
+            </RoleProvider>
+          </UserProvider>
         </RestaurantProvider>
       </body>
     </html>
