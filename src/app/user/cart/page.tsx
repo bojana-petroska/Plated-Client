@@ -13,12 +13,11 @@ const CartPage = () => {
   const { cart, updateItemQuantity, clearCart, setCart } = useCart();
   const { restaurant_id } = useRestaurant();
   console.log('Restaurant ID FROM CONTEXT IN CART PAGE:', restaurant_id);
-  const [alertVisible, setAlertVisible] = useState(false);
   const router = useRouter();
 
   console.log('CartPage rendered, cart:', cart);
 
-  console.log('RESTAURANT ID FROM CONTEXT IN CART PAGE', restaurant_id)
+  console.log('RESTAURANT ID FROM CONTEXT IN CART PAGE', restaurant_id);
 
   const handleUpdateQuantity = (
     id: number | undefined,
@@ -57,12 +56,7 @@ const CartPage = () => {
       clearCart();
       localStorage.removeItem('cart');
 
-      setAlertVisible(true);
-      setTimeout(() => {
-        setAlertVisible(false);
-      }, 4000);
-
-      router.push(`/user/payment?amount=${total}`)
+      router.push(`/user/payment?amount=${total}`);
     } catch (error) {
       console.error('Error creating order:', error);
     }
@@ -92,13 +86,8 @@ const CartPage = () => {
 
   return (
     <div className="container mx-auto mt-10">
-      {alertVisible && (
-        <div className="alert alert-success p-4 mb-4 bg-green-500 text-white rounded">
-          Order Created Successfully!
-        </div>
-      )}
-
       <div className="bg-white rounded-lg p-6 shadow-lg">
+        <h1 className="text-xl font-semibold mb-4">My Cart</h1>
         {cart.map((item, index) => (
           <div
             key={`${item.menuItem?.menuItem_id}-${index}`}

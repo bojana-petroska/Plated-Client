@@ -17,6 +17,9 @@ const HomePage: React.FC = () => {
     []
   );
   const [searchQuery, setSearchQuery] = useState('');
+  const [paginatedRestaurants, setPaginatedRestaurants] = useState<
+    IRestaurant[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
@@ -41,18 +44,29 @@ const HomePage: React.FC = () => {
   }, [router]);
 
   useEffect(() => {
-    const fetchRestaurants = async () => {
+    const fetchAllRestaurants = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(
-          `/restaurants?page=${page}&limit=10`
-        );
-        const fetchedRestaurants = Array.isArray(response?.data?.data)
-          ? response.data.data
-          : [];
-        const totalRecords = response?.data.totalItems || 0;
-        setRestaurants(fetchedRestaurants);        
-        setFilteredRestaurants(fetchedRestaurants);
+        let allRestaurantsList: IRestaurant[] = [];
+        let currentPage = 1;
+        let totalFetched = 0;
+        let totalRecords = 1;
+
+        while (totalFetched < totalRecords) {
+          const response = await axiosInstance.get(
+            `/restaurants?page=${currentPage}&limit=10`
+          );
+
+          const fetchedRestaurants = response?.data?.data || [];
+          totalRecords = response?.data?.totalItems || 0;
+
+          allRestaurantsList = [...allRestaurantsList, ...fetchedRestaurants];
+          totalFetched += fetchedRestaurants.length;
+          currentPage++;
+        }
+
+        setRestaurants(allRestaurantsList);
+        setFilteredRestaurants(allRestaurantsList);
         setTotalPages(Math.ceil(totalRecords / 10));
       } catch (error) {
         console.error('Failed to fetch restaurants:', error);
@@ -61,9 +75,29 @@ const HomePage: React.FC = () => {
       }
     };
 
-    fetchRestaurants();
-  }, [page]);
-  
+    fetchAllRestaurants();
+  }, []);
+
+  useEffect(() => {
+    const startIndex = (page - 1) * 10;
+    const endIndex = startIndex + 10;
+    setPaginatedRestaurants(filteredRestaurants.slice(startIndex, endIndex));
+  }, [filteredRestaurants, page]);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredRestaurants(restaurants);
+      setTotalPages(Math.ceil(restaurants.length / 10));
+    } else {
+      const filtered = restaurants.filter((restaurant) =>
+        restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredRestaurants(filtered);
+      setTotalPages(Math.ceil(filtered.length / 10));
+      setPage(1);
+    }
+  }, [searchQuery, restaurants]);
+
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
   };
@@ -116,7 +150,7 @@ const HomePage: React.FC = () => {
         {' '}
         {/* <h2 className="text-xl mb-4">Restaurants near you</h2> */}
         <RestaurantList
-          filteredRestaurants={restaurants}
+          filteredRestaurants={paginatedRestaurants}
           handleRestaurantClick={handleRestaurantClick}
         />
         <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 pb-[60px]">
@@ -125,9 +159,9 @@ const HomePage: React.FC = () => {
               key={index + 1}
               className={`px-2 py-1 rounded ${
                 page === index + 1
-                  ? 'bg-pink-500 text-white'
-                  : 'bg-gray-200 text-gray-800'
-              } hover:bg-pink-400`}
+                  ? 'bg-[#FF7F7F]/15 text-[#FF7F7F]'
+                  : 'text-gray-800'
+              } hover:bg-[#FF7F7F]/15 hover:text-[#FF7F7F]`}
               onClick={() => handlePageClick(index + 1)}>
               {index + 1}
             </button>
