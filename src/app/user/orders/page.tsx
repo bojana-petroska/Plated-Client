@@ -223,7 +223,7 @@ const OrdersPage = () => {
         </div>
       )}
 
-      <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 space-y-2 pb-[80px]">
+      <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 pb-[80px]">
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}

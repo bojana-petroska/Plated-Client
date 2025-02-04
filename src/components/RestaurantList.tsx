@@ -24,10 +24,10 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
             <div className="mt-1 flex items-center text-sm text-gray-600 space-x-4">
               <span>⏱ {restaurant.openingHours}</span>
             </div>
-            <div className="mt-2 text-sm text-yellow-600 font-bold">
-              ★ open {restaurant.isOpen}
+            <div className="mt-1 flex items-center text-sm text-gray-600 space-x-4">
+              Address: {restaurant.address}
             </div>
-            <p className="mt-2 text-sm text-gray-600">Min Order: €10</p>
+            <p className="mt-1 flex items-center text-sm text-gray-600 space-x-4">Min Order: 10 €</p>
           </div>
 
           <div className="absolute right-[-40px] top-15 w-40 h-40 overflow-hidden rounded-full">
