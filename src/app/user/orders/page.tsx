@@ -30,7 +30,7 @@ const OrdersPage = () => {
 
   const fetchOrders = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('userAuthToken');
       if (!token) {
         console.error('No auth token found.');
         return;
@@ -72,7 +72,7 @@ const OrdersPage = () => {
   // when the restaurant changes the status, it isn't showing inside active tab
   useEffect(() => {
     console.log('did I start ---> useEffect');
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('userAuthToken');
     if (!token || !user_id) return;
     console.log(token);
 

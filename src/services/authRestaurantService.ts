@@ -1,4 +1,5 @@
 import axios from 'axios';
+import socketService from './socket';
 
 class RestaurantAuthService {
   private api;
@@ -8,13 +9,11 @@ class RestaurantAuthService {
       baseURL: 'http://localhost:5001',
     });
 
-    // Automatically set JWT token in the headers for every request
     this.api.interceptors.request.use(
       (config) => {
-        // Retrieve the JWT token from the local storage
         const storedToken =
           typeof window !== 'undefined'
-            ? localStorage.getItem('authToken')
+            ? localStorage.getItem('restaurantAuthToken')
             : null;
         if (storedToken) {
           console.log('STORED TOKEN IN AUTH SERVICE:', storedToken);
@@ -29,8 +28,31 @@ class RestaurantAuthService {
     );
   }
 
-  signin = (requestBody: { name: string; password: string }) => {
-    return this.api.post('/auth/restaurant/signin', requestBody);
+  signin = async (requestBody: { name: string; password: string }) => {
+    try {
+      const response = await this.api.post(
+        '/auth/restaurant/signin',
+        requestBody
+      );
+
+      const token = response.data.token;
+      localStorage.setItem('restaurantAuthToken', token);
+
+      const restaurantId = response.data.data.restaurant_id;
+
+      console.log('what data I see before restaurant signin', response.data.data);
+      console.log(
+        'is the restaurant Id correct before connecting to Sockets?',
+        restaurantId
+      );
+
+      socketService.registerRestaurant(restaurantId);
+
+      return response;
+    } catch (error) {
+      console.error('Restaurant signin error:', error);
+      throw error;
+    }
   };
 
   signup = (requestBody: { name: string; password: string }) => {

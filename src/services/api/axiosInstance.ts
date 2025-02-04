@@ -7,9 +7,15 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const userToken = localStorage.getItem('userAuthToken');
+  const restaurantToken = localStorage.getItem('restaurantAuthToken');
+
+  if (config.url?.includes('/restaurants')) {
+    config.headers.Authorization = `Bearer ${restaurantToken}`;
+  }
+
+  if (config.url?.includes('/users')) {
+    config.headers.Authorization = `Bearer ${userToken}`;
   }
   return config;
 });
