@@ -6,6 +6,7 @@ import axiosInstance from '@/services/api/axiosInstance';
 import { useRestaurant } from '@/contexts/RestaurantContext';
 import { IUser } from '@/types';
 import NavbarUser from '@/components/NavbarUser';
+import { useRouter } from 'next/navigation';
 
 const CartPage = () => {
   const [user, setUser] = useState<IUser | null>(null);
@@ -13,6 +14,7 @@ const CartPage = () => {
   const { restaurant_id } = useRestaurant();
   console.log('Restaurant ID FROM CONTEXT IN CART PAGE:', restaurant_id);
   const [alertVisible, setAlertVisible] = useState(false);
+  const router = useRouter();
 
   console.log('CartPage rendered, cart:', cart);
 
@@ -59,6 +61,8 @@ const CartPage = () => {
       setTimeout(() => {
         setAlertVisible(false);
       }, 4000);
+
+      router.push(`/user/payment?amount=${total}`)
     } catch (error) {
       console.error('Error creating order:', error);
     }
@@ -135,7 +139,7 @@ const CartPage = () => {
         <div className="mt-6">
           <Button
             onClick={handleOrderCreation}
-            text="Pay with PayPal"
+            text="Pay Now"
             type="pink"
             size="default"
           />
