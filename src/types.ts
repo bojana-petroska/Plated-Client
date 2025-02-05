@@ -115,6 +115,7 @@ export interface ICourier {
   password: string;
   email: string;
   phoneNumber: string;
+  address?: string;
   availability: Availability;
   createdAt?: Date;
   updatedAt?: Date;

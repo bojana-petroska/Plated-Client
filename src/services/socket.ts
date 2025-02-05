@@ -44,6 +44,17 @@ class SocketService {
     this.socket.on('courierPickedUp', callback);
   }
 
+  sendMessageToUser(orderId: string, userId: string, message: string) {
+    console.log('Courier sending a message to User with id:', userId, 'message:', message);
+    this.socket.emit('courierMessage', { orderId, userId, message });
+  }
+
+  listenForCourierMessages(
+    callback: (data: { orderId: string; message: string }) => void
+  ) {
+    this.socket.on('courierMessageReceived', callback);
+  }
+
   getSocket() {
     return this.socket;
   }

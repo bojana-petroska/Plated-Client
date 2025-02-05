@@ -13,6 +13,8 @@ const CourierProfilePage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    address: '',
+    phoneNumber: '',
   });
   const [loading, setLoading] = useState(true);
   const editRef = useRef<HTMLDivElement>(null);
@@ -34,10 +36,11 @@ const CourierProfilePage = () => {
         setFormData({
           name: response.data.name || '',
           email: response.data.email || '',
+          address: response.data.address|| '',
+          phoneNumber: response.data.phoneNumber || ''
         });
       } catch (error) {
         console.error('Failed to fetch courier data:', error);
-        // localStorage.removeItem('authToken');
         alert('Session expired. Please log in again.');
         router.push('/courier/signin');
       } finally {

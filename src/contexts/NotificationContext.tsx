@@ -10,6 +10,10 @@ interface NotificationContextType {
   listenForOrderCreation: (callback: (order: IOrder) => void) => void;
   listenForOrderStatusChange: (callback: (order: IOrder) => void) => void;
   listenForCourierPickUp: (callback: (order: IOrder) => void) => void;
+  sendMessageToUser: (orderId: string, userId: string, message: string) => void;
+  listenForCourierMessages: (
+    callback: (data: { orderId: string; message: string }) => void
+  ) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
@@ -39,6 +43,10 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
       socketService.listenForOrderStatusChange(callback),
     listenForCourierPickUp: (callback) =>
       socketService.listenForCourierPickUp(callback),
+    sendMessageToUser: (orderId, userId, message) =>
+      socketService.sendMessageToUser(orderId, userId, message),
+    listenForCourierMessages: (callback) =>
+      socketService.listenForCourierMessages(callback),
   };
 
   return (
