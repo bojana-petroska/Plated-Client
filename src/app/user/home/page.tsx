@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
         setUser(response.data);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('userAuthToken');
         setError('Session expired or token invalid');
         router.push('/user/auth/signin');
       } finally {

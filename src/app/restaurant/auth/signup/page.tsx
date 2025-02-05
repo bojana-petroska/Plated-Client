@@ -34,7 +34,7 @@ const RestaurantSignUpPage = () => {
       });
       const { token, restaurant_id } = signInResponse.data.data;
 
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('restaurantAuthToken', token);
       localStorage.setItem('restaurant_id', restaurant_id);
       console.log('TOKEN IN HANDLE SIGN UP', token);
 

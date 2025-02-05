@@ -13,24 +13,18 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user_id, setUserId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUserId(storedUserId);
     }
-    setLoading(false);
     console.log('User ID from localStorage on mount:', storedUserId);
   }, []);
 
   useEffect(() => {
     console.log('User ID FROM CONTEXT:', user_id);
   }, [user_id]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <UserContext.Provider value={{ user_id, setUserId }}>

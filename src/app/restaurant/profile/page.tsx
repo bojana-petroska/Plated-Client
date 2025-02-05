@@ -45,7 +45,7 @@ const RestaurantProfilePage = () => {
         });
       } catch (error) {
         console.error('Failed to fetch restaurant data:', error);
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('restaurantAuthToken');
         alert('Session expired. Please log in again.');
         router.push('/restaurant/auth/signin');
       } finally {

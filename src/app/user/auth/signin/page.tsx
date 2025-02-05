@@ -19,16 +19,18 @@ const SignIn = () => {
       const response = await authService.signin({ userName, password });
       console.log(response);
       console.log(response.data.success);
-      const { token, refreshToken } = response.data.data;
+      console.log(response.data.data.user_id);
+      const { token, refreshToken, user_id } = response.data.data;
 
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('userAuthToken', token);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('userId', user_id);
 
-      const decodedToken: any = jwtDecode(token);
-      localStorage.setItem('userId', decodedToken.user_id);
-      
-      setUserId(decodedToken.user_id);
-      console.log('User ID from CONTEXT:', setUserId(decodedToken.user_id));
+      // const decodedToken: any = jwtDecode(token);
+      // localStorage.setItem('userId', decodedToken.user_id);
+
+      setUserId(user_id.toString());
+      console.log('User ID from CONTEXT:', user_id);
 
       console.log('TOKEN FROM HANDLE SIGN IN', token);
       router.push('/user/home');

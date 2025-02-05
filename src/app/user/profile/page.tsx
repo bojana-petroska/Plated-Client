@@ -33,9 +33,9 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
+    if (!user_id) return;
+    
     const fetchUserData = async () => {
-      if (!user_id) return;
-
       try {
         const response = await axiosInstance.get(`/users/${user_id}`);
         console.log('This is the user:', response.data)
@@ -50,7 +50,7 @@ const ProfilePage = () => {
         });
       } catch (error) {
         console.error('Failed to fetch user data:', error);
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('userAuthToken');
         alert('Session expired. Please log in again.');
         router.push('/user/auth/signin');
       } finally {
@@ -163,7 +163,7 @@ const ProfilePage = () => {
         <div className="mt-4 bg-[#F8F8F8] rounded-lg p-4 space-y-2">
           <div
             className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
-            onClick={() => localStorage.removeItem('authToken')}>
+            onClick={() => localStorage.removeItem('userAuthToken')}>
             Log Out
           </div>
           <div className="cursor-pointer">Delete Account</div>

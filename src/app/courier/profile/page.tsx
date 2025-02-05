@@ -16,7 +16,7 @@ const CourierProfilePage = () => {
   });
   const [loading, setLoading] = useState(true);
   const editRef = useRef<HTMLDivElement>(null);
-  const courier_id = localStorage.getItem('courierId')
+  const courier_id = localStorage.getItem('courierId');
 
   useClickOutside(editRef, (e) => {
     if ((e.target as HTMLElement).closest('button')) {
@@ -29,7 +29,7 @@ const CourierProfilePage = () => {
     const fetchCourierData = async () => {
       try {
         const response = await axiosInstance.get(`/courier/${courier_id}`);
-        console.log('RESPONSE:', response.data)
+        console.log('RESPONSE:', response.data);
         setCourier(response.data);
         setFormData({
           name: response.data.name || '',
@@ -37,7 +37,6 @@ const CourierProfilePage = () => {
         });
       } catch (error) {
         console.error('Failed to fetch courier data:', error);
-        // localStorage.removeItem('authToken');
         alert('Session expired. Please log in again.');
         router.push('/courier/signin');
       } finally {
@@ -87,7 +86,7 @@ const CourierProfilePage = () => {
           <h1 className="text-2xl text-[#323232]">Courier Profile</h1>
         </div>
         <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-4" ref={editRef}>
-          {[ 'name', 'email', 'address', 'phoneNumber'].map((field) => (
+          {['name', 'email', 'address', 'phoneNumber'].map((field) => (
             <div
               key={field}
               className={`flex justify-between items-center ${field === 'phoneNumber' ? '' : 'border-b-[0.3px] border-[#323232] pb-2'}`}>
@@ -123,9 +122,7 @@ const CourierProfilePage = () => {
           )}
         </div>
         <div className="mt-4 bg-[#F8F8F8] rounded-lg p-4 space-y-2">
-          <div
-            className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
-            onClick={() => localStorage.removeItem('authToken')}>
+          <div className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800">
             Log Out
           </div>
           <div className="cursor-pointer">Delete Account</div>

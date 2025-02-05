@@ -8,7 +8,6 @@ class SocketService {
     this.socket = io('http://localhost:5001');
   }
 
-  // Connect to the socket server
   connect() {
     this.socket.connect();
   }

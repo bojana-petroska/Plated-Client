@@ -20,7 +20,7 @@ const RestaurantSignInPage = () => {
       console.log(response.data.success);
       const { token, refreshToken, restaurant_id } = response.data.data;
 
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('restaurantAuthToken', token);
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('restaurant_id', restaurant_id);
 

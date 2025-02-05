@@ -1,4 +1,5 @@
 import axios from 'axios';
+import socketService from './socket';
 
 class AuthService {
   private api;
@@ -8,15 +9,13 @@ class AuthService {
       baseURL: 'http://localhost:5001',
     });
 
-    // Automatically set JWT token in the headers for every request
     this.api.interceptors.request.use(
       (config) => {
-        // Retrieve the JWT token from the local storage
         const storedToken =
           typeof window !== 'undefined'
-            ? localStorage.getItem('authToken')
+            ? localStorage.getItem('userAuthToken')
             : null;
-            if (storedToken) {
+        if (storedToken) {
           console.log('STORED TOKEN IN AUTH SERVICE:', storedToken);
           config.headers.Authorization = `Bearer ${storedToken}`;
         }
@@ -29,8 +28,31 @@ class AuthService {
     );
   }
 
-  signin = (requestBody: { userName: string; password: string }) => {
-    return this.api.post('/auth/signin', requestBody);
+  signin = async (requestBody: { userName: string; password: string }) => {
+    try {
+      const response = await this.api.post('/auth/signin', requestBody);
+
+      const token = response.data.token;
+      localStorage.setItem('userAuthToken', token);
+
+      const userId = response.data.data.user_id;
+
+      console.log(
+        'what data I see before user signin',
+        response.data.data
+      );
+      console.log(
+        'is the USER ID correct before connecting to Sockets?',
+        userId
+      );
+
+      socketService.registerUser(userId);
+
+      return response;
+    } catch (error) {
+      console.error('User signin error:', error);
+      throw error;
+    }
   };
 
   signup = (requestBody: {
@@ -40,17 +62,6 @@ class AuthService {
   }) => {
     return this.api.post('/auth/signup', requestBody);
   };
-
-  // verify = async () => {
-  //   try {
-  //     console.log("Verifying with headers:", this.api.defaults.headers);
-  //     const response = await this.api.get('/auth/verify');
-  //     return response;
-  //   } catch (error) {
-  //     console.error('Verification error:', error);
-  //     throw error;
-  //   }
-  // };
 }
 
 const authService = new AuthService();
