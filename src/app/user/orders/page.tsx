@@ -84,10 +84,10 @@ const OrdersPage = () => {
       console.log(activeTab);
       socketService.connect();
       console.log('Connecting to socket!!', socketService.connect());
-      
+
       socketService.registerUser(user_id.toString());
       console.log('Is it the correct userId:', user_id);
-      console.log('userId type:', typeof(user_id));
+      console.log('userId type:', typeof user_id);
 
       console.log('Socket connected:', socketService.getSocket().connected);
       socketService.listenForOrderStatusChange((order: IOrder) => {
@@ -110,17 +110,18 @@ const OrdersPage = () => {
   return (
     <div className="p-6">
       <h1 className="text-xl font-semibold mb-4">My Orders</h1>
-      <div className="flex space-x-4 mb-6">
-        <Button
-          text="Current"
-          type={activeTab === 'current' ? 'pink' : 'white'}
+      <div className="flex space-x-4 mb-6 border-[1px] border-dark-gray rounded-xl p-1">
+        <button
           onClick={() => setActiveTab('current')}
-        />
-        <Button
-          text="History"
-          type={activeTab === 'history' ? 'pink' : 'white'}
+          className={`flex-1 text-center px-4 py-2 rounded-lg ${activeTab === 'current' ? 'bg-[#FF7F7F]/15 text-[#FF7F7F]' : 'text-gray-500'}`}>
+          {' '}
+          Current{' '}
+        </button>
+        <button
           onClick={() => setActiveTab('history')}
-        />
+          className={`flex-1 text-center px-4 py-2 rounded-lg ${activeTab === 'history' ? 'bg-[#FF7F7F]/15 text-[#FF7F7F]' : 'text-gray-500'}`}>
+          History
+        </button>
       </div>
 
       {activeTab === 'current' && (
@@ -177,18 +178,20 @@ const OrdersPage = () => {
             orders.map((order) => (
               <div
                 key={order.order_id}
-                className="flex space-x-4 p-4 bg-gray-100 rounded-lg shadow">
-                <img
-                  src={order.restaurant.imageUrl || '/img/dessert.png'}
-                  alt={order.restaurant.name}
-                  className="w-24 h-24 rounded-[50px] object-cover"
-                />
+                className="flex items-center space-x-12 p-4 bg-gray-100 rounded-[15px] shadow">
+                <div className="pl-10 w-52 h-28 flex justify-center items-center">
+                  <img
+                    src={order.restaurant.imageUrl || '/img/dessert.png'}
+                    alt={order.restaurant.name}
+                    className="w-full h-full object-cover rounded-[15px]"
+                  />
+                </div>
 
                 <div className="flex-1">
-                  <h2 className="text-lg font-medium">
+                  <h2 className="text-l font-medium mb-2">
                     {order.restaurant.name}
                   </h2>
-                  <div className="text-sm text-gray-600 mb-2">
+                  <div className="text-sm text-gray-600 mb-4">
                     <p>{new Date(order.createdAt).toLocaleDateString()}</p>
                     <p>
                       {order.orderItems.reduce(
@@ -197,17 +200,13 @@ const OrdersPage = () => {
                       )}{' '}
                       items
                     </p>
-
                     <p>{order.totalPrice.toFixed(2)} €</p>
                   </div>
-                  <div className="flex space-x-4">
-                    <Button
-                      type="pink"
-                      onClick={() => viewOrder(order.order_id)}
-                      text="View Order"
-                      size="small"
-                    />
-                  </div>
+                  <button
+                    onClick={() => viewOrder(order.order_id)}
+                    className="px-10 py-2 border border-[#FF7F7F] text-[#FF7F7F] rounded-[15px] transition duration-300 hover:bg-[#FF7F7F] hover:text-white">
+                    View Order
+                  </button>
                 </div>
               </div>
             ))
@@ -223,15 +222,15 @@ const OrdersPage = () => {
         </div>
       )}
 
-      <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 space-y-2 pb-[80px]">
+      <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 pb-[80px]">
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
             className={`px-2 py-1 rounded ${
               page === index + 1
-                ? 'bg-pink-500 text-white'
-                : 'bg-gray-200 text-gray-800'
-            } hover:bg-pink-400`}
+                ? 'bg-[#FF7F7F]/15 text-[#FF7F7F]'
+                : 'text-gray-800'
+            } hover:bg-[#FF7F7F]/15 hover:text-[#FF7F7F]`}
             onClick={() => handlePageClick(index + 1)}>
             {index + 1}
           </button>

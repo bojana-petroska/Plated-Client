@@ -73,7 +73,7 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ orderId, onClose }) => {
   if (!order) return <div>No order details available.</div>;
 
   return (
-    <div className="p-4 border rounded shadow">
+    <div className="p-4 border rounded shadow space-y-2">
       <button onClick={onClose} className="mb-4 text-red-500">
         Close
       </button>
@@ -82,25 +82,25 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ orderId, onClose }) => {
         <strong>Status:</strong> {order.status}
       </p>
       <p>
-        <strong>Total Price:</strong> ${order.totalPrice.toFixed(2)}
+        <strong>Total Price:</strong> {order.totalPrice.toFixed(2)} €
       </p>
       <p>
-        <strong>Created At:</strong>{' '}
-        {new Date(order.createdAt).toLocaleString()}
+        <strong>Date:</strong>{' '}
+        {new Date(order.createdAt).toLocaleDateString()}
       </p>
-      <h3 className="mt-4 text-lg font-semibold">Order Items</h3>
+      <h3 className="mt-4 text-lg font-semibold pt-6">Order Items</h3>
       <ul>
         {order.orderItems.map((item, index) => (
           <li key={index} className="mb-2">
-            {item.menuItem.name} - ${item.menuItem.price.toFixed(2)} x{' '}
-            {item.quantity}
+            {item.menuItem.name} - {' '}
+            {item.quantity} x {item.menuItem.price.toFixed(2)} €
           </li>
         ))}
       </ul>
       <Button
         onClick={() => handleOrderAgain(order)}
         text="Order Again"
-        type="white"
+        type="pink"
         size="default"
       />
     </div>

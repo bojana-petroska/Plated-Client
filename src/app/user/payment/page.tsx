@@ -1,5 +1,5 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {
@@ -36,6 +36,7 @@ const CheckoutForm = () => {
   const [amount, setAmount] = useState(0);
   const [message, setMessage] = useState('');
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+  const router = useRouter();
 
   const userId = localStorage.getItem('userId');
   console.log('Check for userId:', userId);
@@ -84,10 +85,18 @@ const CheckoutForm = () => {
     }
   };
 
+  useEffect(() => {
+    if (paymentSuccessful) {
+      setTimeout(() => {
+        router.push('/user/home');
+      }, 2000);
+    }
+  }, [paymentSuccessful, router]);
+
   return (
-    <div className="flex flex-col items-center justify-center p-6 max-w-lg mx-auto">
+    <div className="flex flex-col items-center justify-center p-6 min-h-screen">
       {paymentSuccessful ? (
-        <div className="text-center p-6 bg-[#FF7F7F] text-white rounded-lg shadow-lg">
+        <div className="text-center p-6 bg-[#FF7F7F] text-white rounded-lg shadow-lg max-w-lg mx-auto">
           <h2 className="text-xl font-semibold">
             Thank you for your purchase!
           </h2>

@@ -94,11 +94,11 @@ const RestaurantProfilePage = () => {
         <div className="flex items-end mb-6">
           <h1 className="text-2xl text-[#323232]">Restaurant Profile</h1>
         </div>
-        <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-4" ref={editRef}>
+        <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-4 w-full" ref={editRef}>
           {['name', 'email', 'address', 'phoneNumber'].map((field) => (
             <div
               key={field}
-              className={`flex justify-between items-center ${field === 'phoneNumber' ? '' : 'border-b-[0.3px] border-[#323232] pb-2'}`}>
+              className={`flex justify-between items-center ${field === 'phoneNumber' ? '' : 'border-b-[0.3px] border-[#323232] pb-2'} overflow-auto`}>
               <span className="text-[#323232] capitalize">
                 {field.replace(/([A-Z])/g, ' $1')}
               </span>
