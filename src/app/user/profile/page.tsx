@@ -127,7 +127,7 @@ const ProfilePage = () => {
           ].map((field) => (
             <div
               key={field}
-              className={`flex justify-between items-center ${field === 'phoneNumber' ? '' : 'border-b-[0.3px] border-[#323232] pb-2'}`}>
+              className={`w-full flex justify-between items-center ${field === 'phoneNumber' ? '' : 'border-b-[0.3px] border-[#323232] pb-2'}`}>
               <span className="text-[#323232] capitalize">
                 {field.replace(/([A-Z])/g, ' $1')}
               </span>
@@ -137,7 +137,8 @@ const ProfilePage = () => {
                 value={formData[field] || ''}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className="text-gray-500 text-right bg-transparent focus:outline-none"
+                className="w-[250px] text-gray-500 text-right bg-transparent focus:outline-none"
+                // onInput="this.style.width = ((this.value.length + 1) * 8) + 'px'"
               />
             </div>
           ))}

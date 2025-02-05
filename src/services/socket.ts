@@ -11,6 +11,7 @@ class SocketService {
   // Connect to the socket server
   connect() {
     this.socket.connect();
+    console.log('Connected to the socket server!');
   }
 
   registerRestaurant(restaurantId: string) {

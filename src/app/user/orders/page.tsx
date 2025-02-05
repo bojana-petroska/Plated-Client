@@ -2,12 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../../services/api/axiosInstance';
 import NavbarUser from '@/components/NavbarUser';
-import Button from '@/components/Buttons';
 import ViewOrder from '@/components/ViewOrder';
 import { IOrder } from '@/types';
-import { jwtDecode } from 'jwt-decode';
 import socketService from '../../../services/socket';
 import { useUser } from '@/contexts/UserContext';
+import { useNotification } from '@/contexts/NotificationContext';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -17,6 +16,7 @@ const OrdersPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [notifications, setNotifications] = useState<IOrder[]>([]);
   const { user_id, setUserId } = useUser();
+  const { registerUser, listenForOrderStatusChange } = useNotification();
 
   if (!user_id) {
     return <div>Loading user data...</div>;
@@ -36,9 +36,6 @@ const OrdersPage = () => {
         return;
       }
 
-      // const decodedToken: any = jwtDecode(token);
-      // const userId = decodedToken.user_id;
-
       const response = await axiosInstance.get('/orders', {
         params: {
           page,
@@ -46,9 +43,9 @@ const OrdersPage = () => {
           user_id,
         },
       });
-      console.log(user_id);
       const fetchedOrders = response.data.data || [];
       const totalRecords = response.data.totalItems || 0;
+      registerUser(user_id);
       setOrders(fetchedOrders);
       setTotalPages(Math.ceil(totalRecords / 10));
     } catch (error) {
@@ -68,44 +65,31 @@ const OrdersPage = () => {
     setPage(pageNumber);
   };
 
-  // (should) listen for order status change from restaurant
-  // when the restaurant changes the status, it isn't showing inside active tab
   useEffect(() => {
-    console.log('did I start ---> useEffect');
-    const token = localStorage.getItem('authToken');
-    if (!token || !user_id) return;
-    console.log(token);
+    console.log('Socket connected:', socketService.getSocket().connected);
 
-    // const decodedToken: any = jwtDecode(token);
-    // const userId = decodedToken.user_id;
-    // console.log('DECODED', decodedToken)
+    listenForOrderStatusChange((order: IOrder) => {
+      console.log('New order status change received:', order);
 
-    if (activeTab === 'current') {
-      console.log(activeTab);
-      socketService.connect();
-      console.log('Connecting to socket!!', socketService.connect());
-
-      socketService.registerUser(user_id.toString());
-      console.log('Is it the correct userId:', user_id);
-      console.log('userId type:', typeof user_id);
-
-      console.log('Socket connected:', socketService.getSocket().connected);
-      socketService.listenForOrderStatusChange((order: IOrder) => {
-        console.log('New order status change. Can you HEAR ME? -> Si', order);
-        if (order.status === 'preparing') {
-          setNotifications((prevNotifications) => [
-            ...prevNotifications,
-            order,
-          ]);
+      setNotifications((prevNotifications) => {
+        const existingOrder = prevNotifications.find(
+          (o) => o.order_id === order.order_id
+        );
+        if (existingOrder) {
+          return prevNotifications.map((o) =>
+            o.order_id === order.order_id ? order : o
+          );
+        } else {
+          return [...prevNotifications, order];
         }
       });
-    }
+    });
 
     return () => {
-      console.log('did I just disconnect : (');
-      socketService.getSocket().off('orderStatusChanged');
+      console.log('Order status change listener removed');
+      // socketService.getSocket().off('orderStatusChanged');
     };
-  }, [activeTab, user_id]);
+  }, []);
 
   return (
     <div className="p-6">
@@ -127,41 +111,35 @@ const OrdersPage = () => {
       {activeTab === 'current' && (
         <div className="space-y-4">
           {notifications.length === 0 ? (
-            <div className="text-gray-500">No new notifications.</div>
+            <div className="flex justify-center items-center text-gray-500">No new notifications.</div>
           ) : (
-            notifications.map((order) => (
+            notifications.map((order, index) => (
               <div
-                key={order.order_id}
-                className="flex space-x-4 p-4 bg-gray-100 rounded-lg shadow">
+                key={index}
+                className="flex items-center space-x-4 p-4 bg-gray-100 rounded-[55px] shadow max-w-2xl">
                 <img
                   src={order.restaurant.imageUrl || '/img/dessert.png'}
                   alt={order.restaurant.name}
-                  className="w-24 h-24 rounded-[50px] object-cover"
+                  className="w-10 h-10 rounded-full object-cover"
                 />
-
-                <div className="flex-1">
-                  <h2 className="text-lg font-medium">
-                    {order.restaurant.name}
-                  </h2>
-                  <div className="text-sm text-gray-600 mb-2">
-                    <p>{new Date(order.createdAt).toLocaleDateString()}</p>
-                    <p>
-                      {order.orderItems.reduce(
-                        (total, item) => total + item.quantity,
-                        0
-                      )}{' '}
-                      items
+                <div className="flex flex-col space-y-2">
+                  <div className="p-3 rounded-lg max-w-sm">
+                    <h2 className="text-m font-medium pb-4">
+                      {`Thank you for your order! We are preparing it now!`}
+                    </h2>
+                    <p className="text-xs text-gray-600">
+                      From: {order.restaurant.name}
                     </p>
-
-                    <p>{order.totalPrice.toFixed(2)} €</p>
+                    <p className="text-xs text-gray-600 mb-2">
+                      {new Date(order.createdAt).toLocaleTimeString()}
+                    </p>
                   </div>
                   <div className="flex space-x-4">
-                    <Button
-                      type="pink"
+                    <button
                       onClick={() => viewOrder(order.order_id)}
-                      text="View Order"
-                      size="small"
-                    />
+                      className="px-10 py-2 border border-[#FF7F7F] text-[#FF7F7F] rounded-[15px] transition duration-300 hover:bg-[#FF7F7F] hover:text-white">
+                      View Order
+                    </button>
                   </div>
                 </div>
               </div>
@@ -211,6 +189,20 @@ const OrdersPage = () => {
               </div>
             ))
           )}
+          <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 pb-[80px]">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                className={`px-2 py-1 rounded ${
+                  page === index + 1
+                    ? 'bg-[#FF7F7F]/15 text-[#FF7F7F]'
+                    : 'text-gray-800'
+                } hover:bg-[#FF7F7F]/15 hover:text-[#FF7F7F]`}
+                onClick={() => handlePageClick(index + 1)}>
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
@@ -221,22 +213,6 @@ const OrdersPage = () => {
           </div>
         </div>
       )}
-
-      <div className="flex flex-wrap justify-center items-center mt-4 space-x-4 pb-[80px]">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            className={`px-2 py-1 rounded ${
-              page === index + 1
-                ? 'bg-[#FF7F7F]/15 text-[#FF7F7F]'
-                : 'text-gray-800'
-            } hover:bg-[#FF7F7F]/15 hover:text-[#FF7F7F]`}
-            onClick={() => handlePageClick(index + 1)}>
-            {index + 1}
-          </button>
-        ))}
-      </div>
-
       <NavbarUser />
     </div>
   );

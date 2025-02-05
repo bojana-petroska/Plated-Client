@@ -6,11 +6,14 @@ import axiosInstance from '@/services/api/axiosInstance';
 import { useRestaurant } from '@/contexts/RestaurantContext';
 import NavbarRestaurant from '@/components/NavbarRestaurant';
 import Button from '@/components/Buttons';
+import { useNotification } from '@/contexts/NotificationContext';
 
 const RestaurantOrdersPage = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [activeTab, setActiveTab] = useState('pending');
   const { restaurant_id } = useRestaurant();
+  const { registerRestaurant, listenForOrderCreation } = useNotification();
+  const [restaurantName, setRestaurantName] = useState<string>('');
   console.log('Restaurant ID from context:', restaurant_id);
 
   useEffect(() => {
@@ -23,12 +26,11 @@ const RestaurantOrdersPage = () => {
           const response = await axiosInstance.get(
             `/restaurants/${restaurant_id}`
           );
-          console.log('Restaurant fetch response:', response);
           console.log('Restaurant data:', response.data);
           if (response) {
-            socketService.connect();
-            console.log('Connecting to socket!!', socketService.connect());
-            socketService.registerRestaurant(restaurant_id);
+            registerRestaurant(restaurant_id);
+            console.log('Restaurant fetch response:', response);
+            setRestaurantName(response.data.name);
           }
         } catch (error) {
           console.error('Failed to fetch the restaurant:', error);
@@ -37,24 +39,29 @@ const RestaurantOrdersPage = () => {
 
       fetchRestaurant(restaurant_id);
     }
-
-    console.log(orders);
-
-    return () => {
-      socketService.disconnect();
-    };
   }, [restaurant_id, activeTab]);
 
   useEffect(() => {
     console.log('Socket connected:', socketService.getSocket().connected);
-    socketService.listenForOrderCreation((order: IOrder) => {
+    listenForOrderCreation((order: IOrder) => {
       console.log('New order received:', order);
-      setOrders((prevOrders) => [...prevOrders, order]);
+      setOrders((prevOrders) => {
+        const existingOrder = prevOrders.find(
+          (o) => o.order_id === order.order_id
+        );
+        if (existingOrder) {
+          return prevOrders.map((o) =>
+            o.order_id === order.order_id ? order : o
+          );
+        } else {
+          return [...prevOrders, order];
+        }
+      });
     });
 
     return () => {
-      socketService.getSocket().off('orderCreated');
-      console.log('Order Status Changed:');
+      // socketService.getSocket().off('orderCreated');
+      console.log('Order creation listener removed');
     };
   }, []);
 
@@ -66,12 +73,15 @@ const RestaurantOrdersPage = () => {
       console.error('Invalid order_id:', order_id);
       return;
     }
-    
+
     try {
       console.log('Order before status change:', order_id);
-      const response = await axiosInstance.put(`/restaurants/${restaurant_id}/${order_id}/status`, {
-        status: newStatus,
-      });
+      const response = await axiosInstance.put(
+        `/restaurants/${restaurant_id}/${order_id}/status`,
+        {
+          status: newStatus,
+        }
+      );
       console.log('Order status updated:', response);
       if (response.status === 201) {
         setOrders((prevOrders) =>
@@ -83,7 +93,7 @@ const RestaurantOrdersPage = () => {
         );
 
         if (newStatus !== activeTab) {
-          console.log('DO YOU LISTEN TO ME -> YES')
+          console.log('DO YOU LISTEN TO ME -> YES');
           setActiveTab(newStatus);
         }
       }
@@ -94,7 +104,9 @@ const RestaurantOrdersPage = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-semibold mb-4">Orders</h1>
+      <h1 className="text-xl font-semibold mb-4">
+        My Orders: {restaurantName}
+      </h1>
       <div className="flex space-x-4 mb-6 bg-[#F0F0F0] p-2 rounded-xl">
         {Object.values(OrderStatus).map((status) => (
           <Button
@@ -105,7 +117,7 @@ const RestaurantOrdersPage = () => {
           />
         ))}
       </div>
-      <p>restaurant_id: {restaurant_id}</p>
+
       <ul className="space-y-4 text-black mb-40">
         {orders.map((order, index) => (
           <li
