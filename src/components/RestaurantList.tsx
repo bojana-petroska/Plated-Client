@@ -75,7 +75,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
             </p>
           </div>
 
-          <div className="absolute right-[-50px] top-15 w-60 h-60 overflow-hidden rounded-full">
+          <div className="absolute right-[-40px] top-15 w-52 h-52 overflow-hidden rounded-full">
             <img
               src={restaurant.imageUrl || '/img/hero.jpg'}
               alt={restaurant.name}

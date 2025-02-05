@@ -179,11 +179,11 @@ const OrdersPage = () => {
               <div
                 key={order.order_id}
                 className="flex items-center space-x-12 p-4 bg-gray-100 rounded-[15px] shadow">
-                <div className="w-34 h-28 flex justify-center items-center">
+                <div className="pl-10 w-52 h-28 flex justify-center items-center">
                   <img
                     src={order.restaurant.imageUrl || '/img/dessert.png'}
                     alt={order.restaurant.name}
-                    className="w-full h-full pl-4 object-cover rounded-[15px]"
+                    className="w-full h-full object-cover rounded-[15px]"
                   />
                 </div>
 

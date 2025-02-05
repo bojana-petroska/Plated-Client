@@ -128,9 +128,6 @@ const HomePage: React.FC = () => {
       <section className="p-4">
         <GradientHeading />
         <div className="relative w-full max-w-md">
-          {/* <p className="mb-2 text-[16px] font-[MontserratAlternates] text-[#323232]">
-            What do you feel like eating today?
-          </p> */}
           <div className="relative">
             <input
               type="text"
@@ -148,7 +145,6 @@ const HomePage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto px-4 pb-[60px]">
         {' '}
-        {/* <h2 className="text-xl mb-4">Restaurants near you</h2> */}
         <RestaurantList
           filteredRestaurants={paginatedRestaurants}
           handleRestaurantClick={handleRestaurantClick}
