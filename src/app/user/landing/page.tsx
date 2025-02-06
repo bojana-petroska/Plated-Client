@@ -12,7 +12,7 @@ const LandingScreenUser = () => {
     const timer = setTimeout(() => {
       setMoveLogo(true);
       setShowButtons(true);
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -32,12 +32,12 @@ const LandingScreenUser = () => {
       />
 
       <h1
-        className={`text-4xl font-bold text-white ${showButtons ? 'mb-8 animate-slide-up' : 'animate-pulse'} z-10`}>
+        className={`text-2xl font-bold text-white ${showButtons ? 'mb-8 animate-slide-up' : 'animate-pulse'} z-10`}>
         Welcome to Plated
       </h1>
 
       {showButtons && (
-        <div className="flex flex-col space-y-4 z-10 w-96">
+        <div className="flex flex-col space-y-4 z-10 w-96 px-6">
           <Button
             onClick={() => router.push('/user/auth/signin')}
             text="Sign in"

@@ -25,7 +25,7 @@ const NavbarUser = () => {
         svg={cartIcon}
         isActive={pathName === '/user/cart'}>
         {totalQuantity > 0 && (
-          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center border border-white">
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center border border-none">
             {totalQuantity}
           </span>
         )}

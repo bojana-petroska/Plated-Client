@@ -94,7 +94,7 @@ const SingleRestaurantPage = ({ params }: { params: { id: string } }) => {
       </div>
 
       {alert && (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white text-center p-5 rounded z-50">
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#FF7F7F] text-white text-center p-4 rounded-xl z-50">
           Item added to cart!
         </div>
       )}

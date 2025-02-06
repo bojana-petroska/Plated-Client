@@ -93,8 +93,6 @@ const OrdersPage = () => {
       });
     });
 
-    // console.log('Is this a notification?', notifications2);
-
     listenForCourierMessages((data: { orderId: string; message: string }) => {
       console.log('Courier messages received:', data);
 
@@ -206,8 +204,8 @@ const OrdersPage = () => {
             orders.map((order) => (
               <div
                 key={order.order_id}
-                className="flex items-center space-x-12 p-4 bg-gray-100 rounded-[15px] shadow">
-                <div className="pl-10 w-52 h-28 flex justify-center items-center">
+                className="flex items-center space-x-4 p-4 bg-gray-100 rounded-[15px] shadow">
+                <div className="pl-2 w-36 h-24 flex justify-center items-center">
                   <img
                     src={order.restaurant.imageUrl || '/img/dessert.png'}
                     alt={order.restaurant.name}
@@ -216,7 +214,7 @@ const OrdersPage = () => {
                 </div>
 
                 <div className="flex-1">
-                  <h2 className="text-l font-medium mb-2">
+                  <h2 className="text-m font-medium mb-2">
                     {order.restaurant.name}
                   </h2>
                   <div className="text-sm text-gray-600 mb-4">
@@ -232,7 +230,7 @@ const OrdersPage = () => {
                   </div>
                   <button
                     onClick={() => viewOrder(order.order_id)}
-                    className="px-10 py-2 border border-[#FF7F7F] text-[#FF7F7F] rounded-[15px] transition duration-300 hover:bg-[#FF7F7F] hover:text-white">
+                    className="px-4 py-2 border border-[#FF7F7F] text-[#FF7F7F] rounded-[15px] transition duration-300 hover:bg-[#FF7F7F] hover:text-white">
                     View Order
                   </button>
                 </div>
@@ -258,7 +256,7 @@ const OrdersPage = () => {
 
       {selectedOrderId && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded shadow-lg">
+          <div className="bg-white p-4 rounded shadow-lg mb-12">
             <ViewOrder orderId={selectedOrderId} onClose={closeOrderView} />
           </div>
         </div>

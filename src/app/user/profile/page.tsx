@@ -103,6 +103,12 @@ const ProfilePage = () => {
     }));
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('authToken'); // Remove token
+    router.push('/user/auth/signin'); // Redirect to sign-in page
+  };
+  
+
   return (
     <div className="min-h-screen flex bg-white flex-col justify-between px-4 pt-6 font-montserrat">
       <div className="w-full max-w-md mx-auto rounded-xl p-3">
@@ -116,7 +122,7 @@ const ProfilePage = () => {
             />
           </div>
         </div>
-        <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-4" ref={editRef}>
+        <div className="text-sm bg-[#F8F8F8] rounded-lg p-4 space-y-4" ref={editRef}>
           {[
             'userName',
             'firstName',
@@ -137,8 +143,9 @@ const ProfilePage = () => {
                 value={formData[field] || ''}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className="w-[250px] text-gray-500 text-right bg-transparent focus:outline-none"
-                // onInput="this.style.width = ((this.value.length + 1) * 8) + 'px'"
+                className={`text-gray-500 text-right bg-transparent focus:outline-none ${
+                  field === 'email' ? 'w-[250px]' : 'w-[150px]'
+                }`}
               />
             </div>
           ))}
@@ -164,13 +171,16 @@ const ProfilePage = () => {
         <div className="mt-4 bg-[#F8F8F8] rounded-lg p-4 space-y-2">
           <div
             className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
-            onClick={() => localStorage.removeItem('authToken')}>
+            onClick={handleLogout}>
             Log Out
           </div>
           <div className="cursor-pointer">Delete Account</div>
         </div>
       </div>
+      <div className="mt-40">
       <NavbarUser />
+
+      </div>
     </div>
   );
 };

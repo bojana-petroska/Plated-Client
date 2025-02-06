@@ -125,7 +125,7 @@ const CartPage = () => {
           <span>€{total.toFixed(2)}</span>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 mb-28">
           <Button
             onClick={handleOrderCreation}
             text="Pay Now"

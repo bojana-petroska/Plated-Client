@@ -17,11 +17,11 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
           key={`${restaurant.restaurant_id}-${index}`}
           className="relative flex items-center bg-white rounded-lg shadow-[0px_4px_10px_rgba(0,0,0,0.2)] cursor-pointer hover:shadow-xl transition-all overflow-hidden"
           onClick={() => handleRestaurantClick(restaurant.restaurant_id)}>
-          <div className="flex-1 pl-5 pb-5 pt-5">
-            <h3 className="text-lg font-semibold text-gray-900 relative z-10 pb-10">
+          <div className="flex-1 pl-4 pb-5 pt-5">
+            <h3 className="pl-2 text-lg font-semibold text-gray-900 relative z-10 pb-10">
               {restaurant.name}
             </h3>
-            <div className="mt-1 flex items-center text-m text-gray-600 space-x-4">
+            <div className="mt-1 flex items-center text-sm text-gray-600 space-x-4">
               <svg
                 width="26"
                 height="26"
@@ -40,7 +40,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
               </svg>
               <span>{restaurant.openingHours}</span>
             </div>
-            <div className="mt-4 ml-1 flex items-center text-m text-gray-600 space-x-2">
+            <div className="mt-4 ml-1 flex items-center text-sm text-gray-600 space-x-2">
               <svg
                 width="28"
                 height="28"
@@ -66,7 +66,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
                   fill="#BFBFBF"
                 />
               </svg>
-              <span className="mt-1 text-m text-gray-600">
+              <span className="mt-1 text-sm text-gray-600">
                 {restaurant.rating}
               </span>
             </div>
@@ -75,7 +75,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
             </p>
           </div>
 
-          <div className="absolute right-[-40px] top-15 w-52 h-52 overflow-hidden rounded-full">
+          <div className="absolute right-[-30px] top-15 w-36 h-36 overflow-hidden rounded-full">
             <img
               src={restaurant.imageUrl || '/img/hero.jpg'}
               alt={restaurant.name}
