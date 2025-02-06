@@ -31,7 +31,8 @@ const LandingScreenRestaurant = () => {
         className={`m-10 rounded-[20px] transition-all duration-500 ${moveLogo ? 'mt-12' : 'mt-0'} w-32 h-32 z-10`}
       />
 
-      <h1 className={`text-2xl font-bold text-white ${showButtons ? 'mb-8 animate-slide-up' : 'animate-pulse'} z-10`}>
+      <h1
+        className={`text-2xl font-bold text-white ${showButtons ? 'mb-8 animate-slide-up' : 'animate-pulse'} z-10`}>
         Welcome to Plated for Restaurants
       </h1>
 

@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
       ? 'px-4 py-1'
       : 'w-full px-4 py-3 border rounded-[15px]';
   const whiteButtonStyles = 'bg-white text-black hover:bg-gray-100';
-  const pinkButtonStyles = 'bg-[#FF7F7F] text-white hover:bg-[#FF6B6B]';
+  const pinkButtonStyles = 'bg-[#FF7F7F] text-white hover:bg-[#FF6B6B] border-none';
   const greyButtonStyles = 'bg-[#F0F0F0] text-black hover:bg-white border-none';
 
   return (
