@@ -161,23 +161,24 @@ const OrdersPage = () => {
                 />
                 <div className="flex flex-col space-y-2">
                   <div className="p-3 rounded-lg max-w-sm">
-                    <h2 className="text-m font-medium pb-4">
+                    <h2 className="text-m font-bold pb-4">
                       {`Thank you for your order! We are preparing it now!`}
                     </h2>
                     <p className="text-xs text-gray-600">
                       From: {order.restaurant.name}
                     </p>
                     <p className="text-xs text-gray-600 mb-2">
-                      {new Date(order.createdAt).toLocaleTimeString()}
+                      Time: {new Date(order.createdAt).toLocaleTimeString()}
                     </p>
                     {courierMessages[order.order_id] && (
                       <div className="mt-2">
                         {courierMessages[order.order_id].map((msg, idx) => (
-                          <div
-                            key={idx}
-                            className="text-black font-bold text-m mb-1">
-                            <p>Message from courier: {msg.message}</p>
-                            <p>Time: {msg.time}</p>
+                          <div key={idx}>
+                            <h2 className="text-l font-bold py-4 text-[#FF7F7F]">
+                              {msg.message}
+                            </h2>
+                            <p className="text-xs text-[#FF7F7F]/80">Message from courier.</p>
+                            <p className="text-xs text-[#FF7F7F]/80">Time: {msg.time}</p>
                           </div>
                         ))}
                       </div>

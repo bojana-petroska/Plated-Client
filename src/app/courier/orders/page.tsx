@@ -43,7 +43,7 @@ const CourierOrdersPage = () => {
   }, [courier_id]);
 
   return (
-    <div className="p-6">
+    <div className="h-screen p-6 bg-[#C8D3CB]">
       <h1 className="text-xl font-semibold mb-4">My Deliveries:</h1>
 
       <ul className="space-y-4 text-black mb-40">
@@ -52,7 +52,7 @@ const CourierOrdersPage = () => {
         ) : (
           notifications.map((order, index) => (
             <li key={index} className="bg-[#F0F0F0] rounded-xl shadow-md">
-              <p className="p-5 rounded-t-xl text-white font-bold bg-[#323232]">
+              <p className="p-4 rounded-t-xl text-white font-bold bg-[#323232]">
                 Order Number: {order.order_id} | Status:
                 <select
                   value={order.status}
@@ -61,7 +61,7 @@ const CourierOrdersPage = () => {
                       `Update order ${order.order_id} to ${e.target.value}`
                     )
                   }
-                  className="ml-2 p-1 rounded bg-[#323232] text-white">
+                  className="ml-2 p-1 rounded bg-[#323232] text-white border-none outline-none focus:ring-0 cursor-pointer">
                   {Object.values(OrderStatus).map((status) => (
                     <option key={status} value={status}>
                       {status}
@@ -71,20 +71,21 @@ const CourierOrdersPage = () => {
               </p>
               <div className="p-5">
                 <h3 className="font-semibold text-lg">From:</h3>
-                <p className="text-sm">Restaurant: {order.restaurant.name}</p>
+                <p className="text-sm"><strong>Restaurant:</strong> {order.restaurant.name}</p>
                 <p className="text-sm">
-                  Date: {new Date(order.updatedAt).toLocaleDateString()}
+                  <strong>Date:</strong> {new Date(order.updatedAt).toLocaleDateString()}
                 </p>
               </div>
               <div className="p-5 bg-gray-200 rounded-b-xl">
-                <h3 className="font-semibold text-lg">To (Client Info):</h3>
+                <h3 className="font-semibold text-lg">Deliver to:</h3>
+                <h3 className="font-semibold text-m">Client Info:</h3>
                 <p className="text-sm">
-                  Name: {order.user?.firstName} {order.user?.lastName}
+                  <strong>Name:</strong> {order.user?.firstName} {order.user?.lastName}
                 </p>
-                <p className="text-sm">Address: {order.user?.address}</p>
-                <p className="text-sm">Email: {order.user?.email}</p>
+                <p className="text-sm"><strong>Address:</strong> {order.user?.address}</p>
+                <p className="text-sm"><strong>Email:</strong> {order.user?.email}</p>
                 <p className="text-sm">
-                  Phone Number: {order.user?.phoneNumber}
+                  <strong>Phone Number:</strong> {order.user?.phoneNumber}
                 </p>
               </div>
 

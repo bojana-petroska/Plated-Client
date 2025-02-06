@@ -3,7 +3,7 @@ import React from 'react';
 interface ButtonProps {
   onClick: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   text?: string;
-  type: 'white' | 'pink' | 'grey';
+  type: 'white' | 'pink' | 'grey' | 'blue' | 'green';
   size?: 'default' | 'small';
   children?: React.ReactNode;
 }
@@ -20,14 +20,24 @@ const Button: React.FC<ButtonProps> = ({
     size === 'small'
       ? 'px-4 py-1'
       : 'w-full px-4 py-3 border rounded-[15px]';
-  const whiteButtonStyles = 'bg-white text-black hover:bg-gray-100';
-  const pinkButtonStyles = 'bg-[#FF7F7F] text-white hover:bg-[#FF6B6B] border-none';
-  const greyButtonStyles = 'bg-[#F0F0F0] text-black hover:bg-white border-none';
+  // const whiteButtonStyles = 'bg-white text-black hover:bg-gray-100';
+  // const pinkButtonStyles = 'bg-[#FF7F7F] text-white hover:bg-[#FF6B6B] border-none';
+  // const greyButtonStyles = 'bg-[#F0F0F0] text-black hover:bg-white border-none';
+
+  const colorStyles = {
+    white: 'bg-white text-black hover:bg-gray-100 border-none',
+    pink: 'bg-[#FF7F7F] text-white hover:bg-[#FF6B6B] border-none',
+    grey: 'bg-[#F0F0F0] text-black hover:bg-white border-none',
+    blue: 'bg-[#6B9FDC] text-white border-none',
+    green: 'bg-green-500 text-white hover:bg-green-600 border-none',
+  };
 
   return (
     <button
       onClick={onClick}
-      className={`${baseStyles} ${sizeStyles} ${type === 'white' ? whiteButtonStyles : type === 'pink' ? pinkButtonStyles : greyButtonStyles}`}>
+      className={`${baseStyles} ${sizeStyles} ${colorStyles[type]}`}
+      // className={`${baseStyles} ${sizeStyles} ${type === 'white' ? whiteButtonStyles : type === 'pink' ? pinkButtonStyles : greyButtonStyles}`}
+      >
       {children || text}
     </button>
   );

@@ -40,49 +40,64 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-50">
-      <div className="w-full max-w-sm p-8 bg-white rounded-xl shadow-md">
+    <div className="flex justify-center items-center h-screen bg-white">
+      <div className="w-full max-w-sm p-8">
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleSignUp} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-400"
-          />
-          <input
-            type="text"
-            placeholder="Username"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-400"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-400"
-          />
-          <input
-            type="password"
-            placeholder="Confirm password"
-            value={repeatPassword}
-            onChange={(e) => setRepeatPassword(e.target.value)}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-400"
-          />
-          <Button text="Sign up" type="pink" onClick={() => {}} />
+        <form onSubmit={handleSignUp} className="space-y-6">
+          <div>
+            <p className="py-2">Email</p>
+            <input
+              type="email"
+              placeholder="Your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-3 border rounded-[15px] focus:ring-1 focus:ring-[#FF7F7F] focus:outline-none"
+            />
+          </div>
+          <div>
+            <p className="py-2">Username</p>
+            <input
+              type="text"
+              placeholder="Username"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              required
+              className="w-full px-4 py-3 border rounded-[15px] focus:ring-1 focus:ring-[#FF7F7F] focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <p className="py-2">Password</p>
+            <input
+              type="password"
+              placeholder="Your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-3 border rounded-[15px] focus:ring-1 focus:ring-[#FF7F7F] focus:outline-none"
+            />
+          </div>
+          <div>
+            <p className="py-2">Confirm password</p>
+            <input
+              type="password"
+              placeholder="Your Password"
+              value={repeatPassword}
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              required
+              className="w-full px-4 py-3 border rounded-[15px] focus:ring-1 focus:ring-[#FF7F7F] focus:outline-none"
+            />
+          </div>
+          <div className="pt-20">
+            <Button text="Sign up" type="pink" onClick={() => {}} />
+          </div>
         </form>
         <p className="text-center mt-6 text-sm text-gray-500">
           Already have an account?{' '}
           <button
             onClick={() => router.push('/user/auth/signin')}
-            className="text-pink-500 hover:underline">
+            className="text-gray-500 underline">
             Sign in!
           </button>
         </p>

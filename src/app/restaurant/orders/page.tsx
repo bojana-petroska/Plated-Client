@@ -103,16 +103,16 @@ const RestaurantOrdersPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 h-screen bg-[#A5C5DF]">
       <h1 className="text-xl font-semibold mb-4">
         My Orders: {restaurantName}
       </h1>
-      <div className="flex space-x-4 mb-6 bg-[#F0F0F0] p-2 rounded-xl">
+      <div className="flex space-x-4 mb-6 bg-white p-2 rounded-2xl">
         {Object.values(OrderStatus).map((status) => (
           <Button
             key={status}
             text={status}
-            type={activeTab === status ? 'white' : 'grey'}
+            type={activeTab === status ? 'blue' : 'white'}
             onClick={() => setActiveTab(status)}
           />
         ))}
@@ -122,10 +122,10 @@ const RestaurantOrdersPage = () => {
         {orders.map((order, index) => (
           <li
             key={index}
-            className={`bg-[#F0F0F0] rounded-xl ${
+            className={`bg-[#F0F0F0] rounded-2xl ${
               order.status === activeTab ? 'block' : 'hidden'
             }`}>
-            <p className="p-5 rounded-t-xl text-white font-bold bg-[#323232]">
+            <p className="p-5 rounded-t-2xl text-white font-bold bg-[#6B9FDC]">
               Order Number: {order.order_id} | Status:
               <select
                 value={order.status}
@@ -135,7 +135,7 @@ const RestaurantOrdersPage = () => {
                     e.target.value as OrderStatus
                   )
                 }
-                className="ml-2 p-1 rounded bg-[#323232] text-white">
+                className="ml-2 p-1 rounded bg-[#6B9FDC] text-white border-none outline-none focus:ring-0 cursor-pointer">
                 {Object.values(OrderStatus).map((status) => (
                   <option key={status} value={status}>
                     {status}

@@ -89,12 +89,12 @@ const RestaurantProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-white flex-col justify-between px-4 pt-6 font-montserrat">
+    <div className="min-h-screen flex bg-[#A5C5DF] flex-col justify-between px-4 pt-6 font-montserrat">
       <div className="w-full max-w-md mx-auto rounded-xl p-3">
         <div className="flex items-end mb-6">
           <h1 className="text-2xl text-[#323232]">Restaurant Profile</h1>
         </div>
-        <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-4 w-full" ref={editRef}>
+        <div className="bg-white rounded-lg p-4 space-y-4 w-full" ref={editRef}>
           {['name', 'email', 'address', 'phoneNumber'].map((field) => (
             <div
               key={field}
@@ -116,7 +116,7 @@ const RestaurantProfilePage = () => {
         <div className="mt-4 flex justify-between items-center">
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300">
+            className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300 border-none">
             {isEditing ? 'Cancel' : 'Edit'}
           </button>
           {isEditing && (
@@ -125,12 +125,12 @@ const RestaurantProfilePage = () => {
                 e.stopPropagation();
                 handleSave();
               }}
-              className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300">
+              className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300 border-none">
               Save Changes
             </button>
           )}
         </div>
-        <div className="mt-4 bg-[#F8F8F8] rounded-lg p-4 space-y-2">
+        <div className="mt-4 bg-white rounded-lg p-4 space-y-2">
           <div
             className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
             onClick={() => localStorage.removeItem('authToken')}>
