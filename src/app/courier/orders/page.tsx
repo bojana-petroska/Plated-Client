@@ -3,14 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { IOrder, OrderStatus } from '@/types';
 import { useNotification } from '@/contexts/NotificationContext';
 import NavbarCourier from '@/components/NavbarCourier';
-import CourierMessage from '../messages/page';
+import CourierMessage from '@/components/CourierMessage';
 
 const CourierOrdersPage = () => {
   const [notifications, setNotifications] = useState<IOrder[]>([]);
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<string[]>([]);
-  const { registerCourier, listenForOrderStatusChange, sendMessageToUser } =
-    useNotification();
+  const { registerCourier, listenForOrderStatusChange } = useNotification();
   const courier_id = localStorage.getItem('courierId');
 
   useEffect(() => {
@@ -43,15 +40,7 @@ const CourierOrdersPage = () => {
     return () => {
       console.log('Order status change listener removed');
     };
-  }, []);
-
-  const handleSendMessage = (orderId: string, userId: string) => {
-    if (message.trim()) {
-      sendMessageToUser(orderId, userId, message);
-      setMessages((prev) => [...prev, `You: ${message}`]);
-      setMessage('');
-    }
-  };
+  }, [courier_id]);
 
   return (
     <div className="p-6">
@@ -98,15 +87,10 @@ const CourierOrdersPage = () => {
                   Phone Number: {order.user?.phoneNumber}
                 </p>
               </div>
-              {console.log('Order ID:', order.order_id)}
-              {console.log('User ID:', order.user?.user_id)}
+
               <CourierMessage
                 orderId={order.order_id}
                 userId={order.user?.user_id ?? ''}
-                messages={messages}
-                message={message}
-                setMessage={setMessage}
-                handleSendMessage={handleSendMessage}
               />
             </li>
           ))

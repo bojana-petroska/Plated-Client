@@ -18,11 +18,13 @@ const OrdersPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [notifications, setNotifications] = useState<NotificationOrder[]>([]);
-  // const [courierNotifications, setCourierNotifications] = useState<NotificationOrder[]>([]);
+  const [courierMessages, setCourierMessages] = useState<
+    Record<string, { message: string; timestamp: string }[]>
+  >({});
+
   const { user_id, setUserId } = useUser();
   const { registerUser, listenForOrderStatusChange, listenForCourierMessages } =
     useNotification();
-  const [courierMessages, setCourierMessages] = useState<string[]>([]);
 
   if (!user_id) {
     return <div>Loading user data...</div>;
@@ -75,7 +77,7 @@ const OrdersPage = () => {
     console.log('Socket connected:', socketService.getSocket().connected);
 
     listenForOrderStatusChange((order: IOrder) => {
-      console.log('New order status change received:', order);
+      console.log('New order status change received:', order.status);
 
       setNotifications((prevNotifications) => {
         const existingOrder = prevNotifications.find(
@@ -91,24 +93,31 @@ const OrdersPage = () => {
       });
     });
 
+    // console.log('Is this a notification?', notifications2);
+
     listenForCourierMessages((data: { orderId: string; message: string }) => {
       console.log('Courier messages received:', data);
 
-      setNotifications((prevNotifications) => {
-        const updatedNotifications = [...prevNotifications];
-        const orderIndex = updatedNotifications.findIndex(
-          (order) => order.order_id?.toString() === data.orderId
-        );
-        if (orderIndex >= 0) {
-          updatedNotifications[orderIndex] = {
-            ...updatedNotifications[orderIndex],
-            courierMessage: data.message,
-          };
-        }
+      setCourierMessages((prevMessages) => {
+        const existingCourierMessage = prevMessages[data.orderId] || [];
 
-        return updatedNotifications;
+        const messageExists = existingCourierMessage.some(
+          (m) => m.message === data.message
+        );
+
+        if (messageExists) return prevMessages;
+
+        return {
+          ...prevMessages,
+          [data.orderId]: [
+            ...existingCourierMessage,
+            { message: data.message, time: new Date().toLocaleTimeString() },
+          ],
+        };
       });
     });
+
+    console.log('Courier MESSAGES:', courierMessages);
 
     return () => {
       console.log('Order status change listener removed');
@@ -135,6 +144,7 @@ const OrdersPage = () => {
 
       {activeTab === 'current' && (
         <div className="space-y-4">
+          {console.log('Rendering notifications:', notifications)}
           {notifications.length === 0 ? (
             <div className="flex justify-center items-center text-gray-500">
               No new notifications.
@@ -160,9 +170,16 @@ const OrdersPage = () => {
                     <p className="text-xs text-gray-600 mb-2">
                       {new Date(order.createdAt).toLocaleTimeString()}
                     </p>
-                    {order.courierMessage && (
-                      <div className="text-xs text-blue-500">
-                        Message from courier: {order.courierMessage}
+                    {courierMessages[order.order_id] && (
+                      <div className="mt-2">
+                        {courierMessages[order.order_id].map((msg, idx) => (
+                          <div
+                            key={idx}
+                            className="text-black font-bold text-m mb-1">
+                            <p>Message from courier: {msg.message}</p>
+                            <p>Time: {msg.time}</p>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>

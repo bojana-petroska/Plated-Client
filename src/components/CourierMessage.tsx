@@ -1,27 +1,23 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import NavbarCourier from '@/components/NavbarCourier';
+import React, { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 
-const CourierMessage = ({ orderId, userId }: { orderId: string; userId: string }) => {
-  const { sendMessageToUser, listenForCourierMessages } = useNotification();
+const CourierMessage = ({
+  orderId,
+  userId,
+}: {
+  orderId: string;
+  userId: string;
+}) => {
+  const { sendMessageToUser } = useNotification();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<string[]>([]);
 
-  useEffect(() => {
-    const handleIncomingMessage = (data: { orderId: string; message: string }) => {
-      if (data.orderId === orderId) {
-        setMessages((prev) => [...prev, `User: ${data.message}`]);
-      }
-    };
-
-    listenForCourierMessages(handleIncomingMessage);
-  }, [orderId, listenForCourierMessages]);
-
   const handleSendMessage = () => {
     if (message.trim()) {
+      console.log(`Sending message: ${message} to user: ${userId} for order: ${orderId}`);
       sendMessageToUser(orderId, userId, message);
-      setMessages((prev) => [...prev, `You: ${message}`]);
+      setMessages((prev) => [...prev, message]);
       setMessage('');
     }
   };
@@ -45,12 +41,10 @@ const CourierMessage = ({ orderId, userId }: { orderId: string; userId: string }
         />
         <button
           onClick={handleSendMessage}
-          className="ml-2 px-4 py-2 bg-[#8FA394] text-white rounded-2xl"
-        >
+          className="ml-2 px-4 py-2 bg-[#8FA394] text-white rounded-2xl">
           Send
         </button>
       </div>
-      <NavbarCourier />
     </div>
   );
 };

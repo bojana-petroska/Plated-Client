@@ -14,7 +14,12 @@ interface NotificationContextType {
   listenForCourierMessages: (
     callback: (data: { orderId: string; message: string }) => void
   ) => void;
+  // notifications: NotificationOrder;
 }
+
+// interface NotificationOrder extends IOrder {
+//   courierMessage?: string;
+// }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
   undefined
@@ -23,11 +28,32 @@ const NotificationContext = createContext<NotificationContextType | undefined>(
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  // const [notifications, setNotifications] = useState<NotificationOrder[]>([]);
+
   useEffect(() => {
     socketService.connect();
 
+    // socketService.listenForCourierMessages((data: { orderId: string; message: string }) => {
+    //   console.log('Courier messages received:', data);
+
+    //   setNotifications((prevNotifications) => {
+    //     const updatedNotifications = [...prevNotifications];
+    //     const orderIndex = updatedNotifications.findIndex(
+    //       (order) => order.order_id?.toString() === data.orderId
+    //     );
+    //     if (orderIndex >= 0) {
+    //       updatedNotifications[orderIndex] = {
+    //         ...updatedNotifications[orderIndex],
+    //         courierMessage: data.message,
+    //       };
+    //     }
+
+    //     return updatedNotifications;
+    //   });
+    // });
+
     return () => {
-      socketService.disconnect();
+      // socketService.disconnect();
     };
   }, []);
 
@@ -47,6 +73,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
       socketService.sendMessageToUser(orderId, userId, message),
     listenForCourierMessages: (callback) =>
       socketService.listenForCourierMessages(callback),
+    // notifications2: notifications
   };
 
   return (

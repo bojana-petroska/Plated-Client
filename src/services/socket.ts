@@ -8,7 +8,6 @@ class SocketService {
     this.socket = io('http://localhost:5001');
   }
 
-  // Connect to the socket server
   connect() {
     this.socket.connect();
     console.log('Connected to the socket server!');
@@ -45,14 +44,23 @@ class SocketService {
   }
 
   sendMessageToUser(orderId: string, userId: string, message: string) {
-    console.log('Courier sending a message to User with id:', userId, 'message:', message);
+    console.log(
+      'Courier sending a message to User with id:',
+      userId,
+      'message:',
+      message
+    );
     this.socket.emit('courierMessage', { orderId, userId, message });
   }
 
   listenForCourierMessages(
     callback: (data: { orderId: string; message: string }) => void
   ) {
-    this.socket.on('courierMessageReceived', callback);
+    console.log('Listening for courier messages...');
+    this.socket.on('newCourierMessage', (data) => {
+      console.log('User received message from courier:', data);
+      callback(data);
+    });
   }
 
   getSocket() {
