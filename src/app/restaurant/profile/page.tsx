@@ -92,9 +92,9 @@ const RestaurantProfilePage = () => {
     <div className="min-h-screen flex bg-[#A5C5DF] flex-col justify-between px-4 pt-6 font-montserrat">
       <div className="w-full max-w-md mx-auto rounded-xl p-3">
         <div className="flex items-end mb-6">
-          <h1 className="text-2xl text-[#323232]">Restaurant Profile</h1>
+          <h1 className="text-xl text-[#323232]">Restaurant Profile</h1>
         </div>
-        <div className="bg-white rounded-lg p-4 space-y-4 w-full" ref={editRef}>
+        <div className="bg-white rounded-lg p-4 space-y-4 w-full text-sm" ref={editRef}>
           {['name', 'email', 'address', 'phoneNumber'].map((field) => (
             <div
               key={field}
@@ -108,7 +108,9 @@ const RestaurantProfilePage = () => {
                 value={formData[field] || ''}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className="text-gray-500 text-right bg-transparent focus:outline-none"
+                className={`text-gray-500 text-right bg-transparent focus:outline-none ${
+                  field === 'email' ? 'w-[250px]' : 'w-[150px]'
+                }`}
               />
             </div>
           ))}
@@ -116,7 +118,7 @@ const RestaurantProfilePage = () => {
         <div className="mt-4 flex justify-between items-center">
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300 border-none">
+            className="text-sm bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300 border-none">
             {isEditing ? 'Cancel' : 'Edit'}
           </button>
           {isEditing && (
@@ -125,18 +127,18 @@ const RestaurantProfilePage = () => {
                 e.stopPropagation();
                 handleSave();
               }}
-              className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300 border-none">
+              className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300 border-none text-sm">
               Save Changes
             </button>
           )}
         </div>
         <div className="mt-4 bg-white rounded-lg p-4 space-y-2">
           <div
-            className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
+            className="text-sm cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
             onClick={() => localStorage.removeItem('authToken')}>
             Log Out
           </div>
-          <div className="cursor-pointer">Delete Account</div>
+          <div className="text-sm cursor-pointer">Delete Account</div>
         </div>
       </div>
       <NavbarRestaurant />

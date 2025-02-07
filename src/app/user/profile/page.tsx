@@ -104,8 +104,8 @@ const ProfilePage = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Remove token
-    router.push('/user/auth/signin'); // Redirect to sign-in page
+    localStorage.removeItem('authToken');
+    router.push('/user/auth/signin');
   };
   
 
@@ -113,7 +113,7 @@ const ProfilePage = () => {
     <div className="min-h-screen flex bg-white flex-col justify-between px-4 pt-6 font-montserrat">
       <div className="w-full max-w-md mx-auto rounded-xl p-3">
         <div className="flex items-end mb-6">
-          <h1 className="text-2xl text-[#323232]">My Account</h1>
+          <h1 className="text-xl text-[#323232]">My Account</h1>
           <div className="relative ml-auto text-center">
             <ImageUploader
               userId={user_id || 0}
@@ -153,7 +153,7 @@ const ProfilePage = () => {
         <div className="mt-4 flex justify-between items-center">
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300">
+            className="text-sm bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300">
             {isEditing ? 'Cancel' : 'Edit'}
           </button>
           {isEditing && (
@@ -163,18 +163,18 @@ const ProfilePage = () => {
                 console.log('Button clicked!!!');
                 handleSave();
               }}
-              className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300">
+              className="bg-[#323232] text-white py-2 px-4 rounded-lg border border-gray-300 text-sm">
               Save Changes
             </button>
           )}
         </div>
         <div className="mt-4 bg-[#F8F8F8] rounded-lg p-4 space-y-2">
           <div
-            className="cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
+            className="text-sm cursor-pointer border-b-[0.3px] border-[#323232] pb-2 text-gray-800"
             onClick={handleLogout}>
             Log Out
           </div>
-          <div className="cursor-pointer">Delete Account</div>
+          <div className="cursor-pointer text-sm">Delete Account</div>
         </div>
       </div>
       <div className="mt-40">

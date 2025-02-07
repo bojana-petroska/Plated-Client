@@ -9,7 +9,7 @@ const NavbarUser = () => {
   const pathName = usePathname();
 
   return (
-    <footer className="fixed bottom-3 left-3 right-3 bg-gray-100 py-4 flex justify-around items-center rounded-[50px] shadow-md z-50">
+    <footer className="fixed bottom-3 left-3 right-3 bg-gray-100 py-2 flex justify-around items-center rounded-[50px] shadow-md z-50">
       <NavButton
         href="/user/home"
         svg={homeIcon}

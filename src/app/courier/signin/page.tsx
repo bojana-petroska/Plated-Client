@@ -68,11 +68,19 @@ const CourierSignIn = () => {
           <div className="pt-20">
             <button
               onClick={() => router.push('/courier/orders')}
-              className="w-full py-3 rounded-[15px] transition duration-300 bg-[#6B9FDC] text-white hover:bg-[#6B9FDC]/80 border-none">
+              className="w-full py-3 rounded-[15px] transition duration-300 bg-[#8FA394] text-white hover:bg-[#8FA394]/80 border-none">
               Sign In
             </button>
           </div>
         </form>
+        <p className="text-center mt-6 text-sm text-gray-500">
+          Don’t have an account?{' '}
+          <button
+            onClick={() => router.push('/user/auth/signup')}
+            className="text-gray-500 underline">
+            Sign up!
+          </button>
+        </p>
       </div>
     </div>
   );

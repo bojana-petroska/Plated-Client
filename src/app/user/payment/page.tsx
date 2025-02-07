@@ -10,6 +10,9 @@ import {
 } from '@stripe/react-stripe-js';
 import axiosInstance from '@/services/api/axiosInstance';
 import Button from '@/components/Buttons';
+import { useRestaurant } from '@/contexts/RestaurantContext';
+import { IUser } from '@/types';
+import { useCart } from '@/contexts/CartContext';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -37,9 +40,59 @@ const CheckoutForm = () => {
   const [message, setMessage] = useState('');
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const router = useRouter();
+  const [user, setUser] = useState<IUser | null>(null);
+  const { cart, clearCart } = useCart();
+
+  const { restaurant_id } = useRestaurant();
 
   const userId = localStorage.getItem('userId');
   console.log('Check for userId:', userId);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosInstance.get('/users/profile');
+        setUser(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const total = cart.reduce((acc, item) => {
+    if (item.menuItem && item.menuItem.price) {
+      return acc + item.menuItem.price * item.quantity;
+    }
+    return acc;
+  }, 0);
+
+  const handleOrderCreation = async () => {
+    if (!restaurant_id) {
+      throw new Error('Restaurant ID not found');
+    }
+
+    try {
+      const response = await axiosInstance.post('/orders', {
+        userName: user?.userName,
+        restaurant_id: restaurant_id,
+        orderItems: cart.map((item) => ({
+          menuItem: item.menuItem,
+          quantity: item.quantity,
+        })),
+      });
+
+      console.log('Order created:', response.data);
+
+      clearCart();
+      localStorage.removeItem('cart');
+
+      router.push(`/user/payment?amount=${total}`);
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
+  };
 
   useEffect(() => {
     const amountFromQuery = searchParams.get('amount');
@@ -50,6 +103,7 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    await handleOrderCreation();
 
     if (!stripe || !elements) return;
 
@@ -88,7 +142,7 @@ const CheckoutForm = () => {
   useEffect(() => {
     if (paymentSuccessful) {
       setTimeout(() => {
-        router.push('/user/home');
+        router.push('/user/orders');
       }, 2000);
     }
   }, [paymentSuccessful, router]);

@@ -37,7 +37,7 @@ const CourierMessage = ({
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Send an update to the user"
+          placeholder="Send an update"
           className="flex-1 p-2 rounded-2xl focus:ring-2 focus:ring-[#C8D3CB] border-none focus:outline-none"
         />
         <button

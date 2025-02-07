@@ -36,31 +36,31 @@ const CartPage = () => {
     return acc;
   }, 0);
 
-  const handleOrderCreation = async () => {
-    if (!restaurant_id) {
-      throw new Error('Restaurant ID not found');
-    }
+  // const handleOrderCreation = async () => {
+  //   if (!restaurant_id) {
+  //     throw new Error('Restaurant ID not found');
+  //   }
 
-    try {
-      const response = await axiosInstance.post('/orders', {
-        userName: user?.userName,
-        restaurant_id: restaurant_id,
-        orderItems: cart.map((item) => ({
-          menuItem: item.menuItem,
-          quantity: item.quantity,
-        })),
-      });
+  //   try {
+  //     const response = await axiosInstance.post('/orders', {
+  //       userName: user?.userName,
+  //       restaurant_id: restaurant_id,
+  //       orderItems: cart.map((item) => ({
+  //         menuItem: item.menuItem,
+  //         quantity: item.quantity,
+  //       })),
+  //     });
 
-      console.log('Order created:', response.data);
+  //     console.log('Order created:', response.data);
 
-      clearCart();
-      localStorage.removeItem('cart');
+  //     clearCart();
+  //     localStorage.removeItem('cart');
 
-      router.push(`/user/payment?amount=${total}`);
-    } catch (error) {
-      console.error('Error creating order:', error);
-    }
-  };
+  //     router.push(`/user/payment?amount=${total}`);
+  //   } catch (error) {
+  //     console.error('Error creating order:', error);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -127,14 +127,16 @@ const CartPage = () => {
 
         <div className="mt-6 mb-28">
           <Button
-            onClick={handleOrderCreation}
+            onClick={() => router.push(`/user/payment?amount=${total}`)}
             text="Pay Now"
             type="pink"
             size="default"
           />
         </div>
       </div>
-      <NavbarUser />
+      <div className="pt-20">
+        <NavbarUser />
+      </div>
     </div>
   );
 };

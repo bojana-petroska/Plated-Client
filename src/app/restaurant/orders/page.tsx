@@ -107,7 +107,7 @@ const RestaurantOrdersPage = () => {
       <h1 className="text-xl font-semibold mb-4">
         My Orders: {restaurantName}
       </h1>
-      <div className="flex space-x-4 mb-6 bg-white p-2 rounded-2xl">
+      <div className="flex space-x-[0.5px] mb-6 bg-white p-2 rounded-2xl">
         {Object.values(OrderStatus).map((status) => (
           <Button
             key={status}
@@ -170,7 +170,9 @@ const RestaurantOrdersPage = () => {
           </li>
         ))}
       </ul>
-      <NavbarRestaurant />
+      <div className="pt-20">
+        <NavbarRestaurant />
+      </div>
     </div>
   );
 };

@@ -71,19 +71,27 @@ const CourierOrdersPage = () => {
               </p>
               <div className="p-5">
                 <h3 className="font-semibold text-lg">From:</h3>
-                <p className="text-sm"><strong>Restaurant:</strong> {order.restaurant.name}</p>
                 <p className="text-sm">
-                  <strong>Date:</strong> {new Date(order.updatedAt).toLocaleDateString()}
+                  <strong>Restaurant:</strong> {order.restaurant.name}
+                </p>
+                <p className="text-sm">
+                  <strong>Date:</strong>{' '}
+                  {new Date(order.updatedAt).toLocaleDateString()}
                 </p>
               </div>
               <div className="p-5 bg-gray-200 rounded-b-xl">
                 <h3 className="font-semibold text-lg">Deliver to:</h3>
                 <h3 className="font-semibold text-m">Client Info:</h3>
                 <p className="text-sm">
-                  <strong>Name:</strong> {order.user?.firstName} {order.user?.lastName}
+                  <strong>Name:</strong> {order.user?.firstName}{' '}
+                  {order.user?.lastName}
                 </p>
-                <p className="text-sm"><strong>Address:</strong> {order.user?.address}</p>
-                <p className="text-sm"><strong>Email:</strong> {order.user?.email}</p>
+                <p className="text-sm">
+                  <strong>Address:</strong> {order.user?.address}
+                </p>
+                <p className="text-sm">
+                  <strong>Email:</strong> {order.user?.email}
+                </p>
                 <p className="text-sm">
                   <strong>Phone Number:</strong> {order.user?.phoneNumber}
                 </p>
@@ -97,7 +105,9 @@ const CourierOrdersPage = () => {
           ))
         )}
       </ul>
-      <NavbarCourier />
+      <div className="pt-20">
+        <NavbarCourier />
+      </div>
     </div>
   );
 };

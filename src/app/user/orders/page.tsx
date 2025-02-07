@@ -175,8 +175,12 @@ const OrdersPage = () => {
                             <h2 className="text-l font-bold py-4 text-[#FF7F7F]">
                               {msg.message}
                             </h2>
-                            <p className="text-xs text-[#FF7F7F]/80">Message from courier.</p>
-                            <p className="text-xs text-[#FF7F7F]/80">Time: {msg.time}</p>
+                            <p className="text-xs text-[#FF7F7F]/80">
+                              Message from courier.
+                            </p>
+                            <p className="text-xs text-[#FF7F7F]/80">
+                              Time: {msg.time}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -261,7 +265,9 @@ const OrdersPage = () => {
           </div>
         </div>
       )}
-      <NavbarUser />
+      <div className="pt-20">
+        <NavbarUser />
+      </div>
     </div>
   );
 };
