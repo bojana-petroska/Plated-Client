@@ -21,16 +21,16 @@ const ConfirmDeleteModal: React.FC = () => {
               confirmDelete(true);
               cancelDelete();
             }}
-            type="pink"
-            size="small">
+            type="grey"
+            size="default">
             Yes
           </Button>
           <Button
             onClick={() => {
               cancelDelete();
             }}
-            type="white"
-            size="small">
+            type="pink"
+            size="default">
             No
           </Button>
         </div>

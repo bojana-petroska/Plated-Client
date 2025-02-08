@@ -125,7 +125,7 @@ const RestaurantOrdersPage = () => {
             className={`bg-[#F0F0F0] rounded-2xl ${
               order.status === activeTab ? 'block' : 'hidden'
             }`}>
-            <p className="p-5 rounded-t-2xl text-white font-bold bg-[#6B9FDC]">
+            <p className="p-3 rounded-t-2xl text-white font-bold bg-[#6B9FDC]">
               Order Number: {order.order_id} | Status:
               <select
                 value={order.status}
@@ -143,26 +143,26 @@ const RestaurantOrdersPage = () => {
                 ))}
               </select>
             </p>
-            <p className="mb-2 mt-2">
+            <p className="mb-2 mt-2 text-sm">
               <span className="p-5">
                 Customer: {order.user?.firstName} {order.user?.lastName}
               </span>
             </p>
-            <p className="mb-2 mt-2">
+            <p className="mb-2 mt-2 text-sm">
               <span className="p-5">Address: {order.user?.address}</span>
             </p>
-            <p className="mb-2 mt-2">
+            <p className="mb-2 mt-2 text-sm">
               <span className="p-5">
                 Date: {new Date(order.createdAt).toLocaleDateString()}
               </span>
             </p>
-            <p className="pl-5 mb-2 mt-2">
+            <p className="pl-5 mb-2 mt-2 text-sm">
               <span>
                 Items:{' '}
                 {order.orderItems.map((item) => item.menuItem.name).join(', ')}
               </span>
             </p>
-            <p className="pb-5">
+            <p className="pb-5 text-sm">
               <span className="p-5">
                 Total: {order.totalPrice.toFixed(2)} €
               </span>

@@ -17,12 +17,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const baseStyles = 'px-24 py-3 rounded-[15px] transition duration-300';
   const sizeStyles =
-    size === 'small'
-      ? 'px-4 py-1'
-      : 'w-full px-4 py-3 border rounded-[15px]';
-  // const whiteButtonStyles = 'bg-white text-black hover:bg-gray-100';
-  // const pinkButtonStyles = 'bg-[#FF7F7F] text-white hover:bg-[#FF6B6B] border-none';
-  // const greyButtonStyles = 'bg-[#F0F0F0] text-black hover:bg-white border-none';
+    size === 'small' ? 'px-4 py-1' : 'w-full px-4 py-3 border rounded-[15px]';
 
   const colorStyles = {
     white: 'bg-white text-black hover:bg-gray-100 border-none',
@@ -35,9 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`${baseStyles} ${sizeStyles} ${colorStyles[type]}`}
-      // className={`${baseStyles} ${sizeStyles} ${type === 'white' ? whiteButtonStyles : type === 'pink' ? pinkButtonStyles : greyButtonStyles}`}
-      >
+      className={`${baseStyles} ${sizeStyles} ${colorStyles[type]}`}>
       {children || text}
     </button>
   );
