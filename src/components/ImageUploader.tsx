@@ -16,6 +16,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [alerts, setAlerts] = useState(false);
 
   const handleSVGClick = () => {
     if (fileInputRef.current) {
@@ -27,7 +28,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImage(file);
-      setImagePreview(URL.createObjectURL(file)); 
+      setImagePreview(URL.createObjectURL(file));
 
       try {
         const response = await axiosInstance.get(`/users/upload/${userId}`);
@@ -57,7 +58,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         if (updateResponse.status === 200) {
           onImageUpdate(imageUrl);
           setImagePreview(null);
-          alert('Image uploaded and profile updated successfully!');
+          setTimeout(() => {
+            setAlerts(true);
+            setTimeout(() => {
+              setAlerts(false);
+            }, 1500);
+          });
+          // alert('Image uploaded and profile updated successfully!');
         } else {
           alert('Failed to update profile picture.');
         }
@@ -107,6 +114,11 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           </svg>
         </div>
       </div>
+      {alerts && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#FF7F7F] text-white text-center p-4 rounded-xl z-50">
+            Image uploaded and profile updated successfully!
+          </div>
+        )}
     </div>
   );
 };

@@ -22,6 +22,7 @@ const ProfilePage = () => {
   });
   const [loading, setLoading] = useState(true);
   const editRef = useRef<HTMLDivElement>(null);
+  const [alerts, setAlerts] = useState(false);
 
   const { user_id } = useUser();
 
@@ -38,7 +39,7 @@ const ProfilePage = () => {
 
       try {
         const response = await axiosInstance.get(`/users/${user_id}`);
-        console.log('This is the user:', response.data)
+        console.log('This is the user:', response.data);
         setUser(response.data);
         setFormData({
           userName: response.data.userName || '',
@@ -79,13 +80,17 @@ const ProfilePage = () => {
     console.log('Sending form data:', formData);
 
     try {
-      const response = await axiosInstance.put(
-        `/users/${user_id}`,
-        formData
-      );
+      const response = await axiosInstance.put(`/users/${user_id}`, formData);
       setFormData(response.data);
       setIsEditing(false);
-      alert('Profile updated successfully!');
+      setTimeout(() => {
+        setAlerts(true);
+        setTimeout(() => {
+          setAlerts(false);
+        }, 1500);
+      });
+      // setAlerts(true)
+      // alert('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
       alert('Failed to update profile.');
@@ -107,7 +112,6 @@ const ProfilePage = () => {
     localStorage.removeItem('authToken');
     router.push('/user/auth/signin');
   };
-  
 
   return (
     <div className="min-h-screen flex bg-white flex-col justify-between px-4 pt-6 font-montserrat">
@@ -122,7 +126,9 @@ const ProfilePage = () => {
             />
           </div>
         </div>
-        <div className="text-sm bg-[#F8F8F8] rounded-lg p-4 space-y-4" ref={editRef}>
+        <div
+          className="text-sm bg-[#F8F8F8] rounded-lg p-4 space-y-4"
+          ref={editRef}>
           {[
             'userName',
             'firstName',
@@ -178,8 +184,12 @@ const ProfilePage = () => {
         </div>
       </div>
       <div className="mt-40">
-      <NavbarUser />
-
+        {alerts && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#FF7F7F] text-white text-center p-4 rounded-xl z-50">
+            Profile updated successfully!
+          </div>
+        )}
+        <NavbarUser />
       </div>
     </div>
   );

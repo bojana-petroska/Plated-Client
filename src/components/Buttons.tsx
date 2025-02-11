@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   const colorStyles = {
     white: 'bg-white text-black hover:bg-gray-100 border-none',
     pink: 'bg-[#FF7F7F] text-white hover:bg-[#FF6B6B] border-none',
-    grey: 'bg-[#F0F0F0] text-black hover:bg-white border-none',
+    grey: 'bg-[#F0F0F0] text-black hover:bg-gray-300 border-none',
     blue: 'bg-[#6B9FDC] text-white border-none',
     green: 'bg-green-500 text-white hover:bg-green-600 border-none',
   };
