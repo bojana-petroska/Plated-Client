@@ -6,6 +6,9 @@ This is the **frontend implementation** of **Plated**, a food ordering platform 
 
 [Figma Design](https://www.figma.com/proto/eGNq2Xx8ZPKMoEEAZwV9rZ/Plated---Bojana?node-id=1534-1481&p=f&t=F5RrhT0sZiHNQwnr-9&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1534%3A1481&show-proto-sidebar=1)
 
+[Watch the Video Presentation:](https://www.loom.com/share/67548aa8584246e585bc26610f71a5d8)
+[![Watch the Video Presentation](./public/img/screenshot.png)](https://www.loom.com/share/67548aa8584246e585bc26610f71a5d8)
+
 ---
 
 ## Features
