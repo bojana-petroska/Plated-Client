@@ -1,4 +1,4 @@
-# Food Ordering Online System (Work in Progress)
+# Food Ordering Online System
 
 ## Overview
 
